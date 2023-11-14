@@ -1,9 +1,9 @@
 import 'package:demarche_app/delayed_animation.dart';
-import 'package:demarche_app/screen/commence2.dart';
+import 'package:demarche_app/screen/Inscription.dart';
 import 'package:flutter/material.dart';
 
-class commence_screen extends StatelessWidget {
-  const commence_screen({super.key});
+class commence1 extends StatelessWidget {
+  const commence1({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +38,7 @@ class commence_screen extends StatelessWidget {
                     width: 1100,
                     height: 280,
                     child: Image.asset(
-                      'assets/images/image15.png',
+                      'assets/images/image16.png',
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -86,7 +86,7 @@ class commence_screen extends StatelessWidget {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const commence1()));
+                                builder: (context) => const Inscription()));
                       },
                     ),
                   ),

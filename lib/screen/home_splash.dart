@@ -1,5 +1,6 @@
 import 'package:demarche_app/delayed_animation.dart';
 import 'package:demarche_app/screen/commence_screen.dart';
+import 'package:demarche_app/screen/connexion_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -35,6 +36,7 @@ class Home_splash extends StatelessWidget {
                 'Bienvenue !',
                 style: TextStyle(
                     fontSize: 30,
+                    fontFamily: 'Poppins',
                     color: Color.fromRGBO(28, 36, 129, 10),
                     fontWeight: FontWeight.bold),
               )),
@@ -101,7 +103,7 @@ class Home_splash extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const commence_screen()));
+                            builder: (context) => const Connexion_Screen()));
                   },
                 ),
               ),
