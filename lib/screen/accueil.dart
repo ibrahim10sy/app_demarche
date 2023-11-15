@@ -1,3 +1,4 @@
+import 'package:demarche_app/screen/carousel_loading.dart';
 import 'package:flutter/material.dart';
 
 class Accueil extends StatefulWidget {
@@ -10,11 +11,6 @@ class Accueil extends StatefulWidget {
 class _AccueilState extends State<Accueil> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 245, 242, 242),
-      appBar: AppBar(
-        title: const Text("Accueil"),
-      ),
-    );
+    return const Scaffold(body: SafeArea(child: CarouselLoading()));
   }
 }

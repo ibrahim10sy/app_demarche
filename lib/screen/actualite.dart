@@ -11,9 +11,9 @@ class _ActualiteState extends State<Actualite> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 245, 242, 242),
+      backgroundColor: const Color.fromARGB(255, 192, 191, 191),
       appBar: AppBar(
-        title: const Text("Actualite"),
+        title: Container(child: const Text("Actualite")),
       ),
     );
   }

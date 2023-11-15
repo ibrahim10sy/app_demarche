@@ -11,8 +11,8 @@ class _ForumState extends State<Forum> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 245, 242, 242),
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 245, 242, 242),
         title: const Text("Forum"),
       ),
     );

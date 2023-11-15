@@ -36,16 +36,24 @@ class _NavState extends State<Nav> {
       body: Center(child: _listTab.elementAt(_selectedIndex)),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: const Color.fromARGB(255, 245, 242, 242),
-       elevation: 12.0, // Augmentation de l'élévation
-        
+        elevation: 12.0, // Augmentation de l'élévation
+
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.home, color: dRed),
+            icon: Icon(
+              Icons.home,
+              color: dRed,
+              size: 30,
+            ),
             label: 'Accueil',
             // backgroundColor: Colors.white,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.location_on, color: dRed),
+            icon: Icon(
+              Icons.location_on,
+              color: dRed,
+              size: 30,
+            ),
             label: 'Localisation',
             // backgroundColor: Colors.white,
           ),
@@ -53,19 +61,27 @@ class _NavState extends State<Nav> {
             icon: Icon(
               Icons.article,
               color: dRed,
-              size: 22,
+              size: 30,
             ),
             label: 'Actualite',
             // backgroundColor: Colors.white,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.forum, color: dRed),
+            icon: Icon(
+              Icons.forum,
+              color: dRed,
+              size: 30,
+            ),
             label: 'Forum',
             // backgroundColor: Colors.white,
           ),
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: dRed,
+        unselectedItemColor:
+            Colors.grey, // Couleur des icônes non sélectionnées
+        selectedFontSize: 16.0, // Taille des icônes sélectionnées
+        unselectedFontSize: 14.0, // Taille des icônes non sélectionnées
         onTap: _currentIndex,
       ),
     );

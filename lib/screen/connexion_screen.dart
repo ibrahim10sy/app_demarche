@@ -1,4 +1,5 @@
 import 'package:demarche_app/delayed_animation.dart';
+import 'package:demarche_app/screen/Inscription.dart';
 import 'package:demarche_app/screen/home.dart';
 import 'package:flutter/material.dart';
 
@@ -189,9 +190,11 @@ class _Connexion_ScreenState extends State<Connexion_Screen> {
                             onPressed: () {
                               print('Bouton pressé!');
                             },
+                            
                             style: ElevatedButton.styleFrom(
                               backgroundColor:
                                   const Color.fromRGBO(28, 36, 129, 1.0),
+                                 
                               padding: const EdgeInsets.all(17),
                             ),
                             child: const Row(
@@ -210,6 +213,35 @@ class _Connexion_ScreenState extends State<Connexion_Screen> {
                               ],
                             ),
                           )),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 45, vertical: 15),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const Inscription()));
+                          print('Appui simple détecté!');
+                        },
+                        child: Container(
+                          alignment: Alignment.center,
+                          child: Container(
+                            padding: const EdgeInsets.all(1.0),
+                            child: const Text(
+                              'Vous n\'avez pas de compte ? Créer un compte',
+                              style: TextStyle(
+                                decoration: TextDecoration.underline,
+                                decorationColor: d_red,
+                                color: d_red,
+                                fontSize: 15.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
                   ],
                 ),
