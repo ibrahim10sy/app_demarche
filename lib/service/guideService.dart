@@ -14,7 +14,7 @@ class GuideService {
 
     if (response.statusCode == 200) {
       List<dynamic> body = jsonDecode(utf8.decode(response.bodyBytes));
-      guides = body.map((dynamic item) => Guide.fromJson(item)).toList();
+      guides = body.map((item) => Guide.fromMap(item)).toList();
       print('Resultat attendue : ${response.statusCode}');
       debugPrint(response.body);
       return guides;
@@ -24,4 +24,24 @@ class GuideService {
       throw Exception(jsonDecode(utf8.decode(response.bodyBytes))["message"]);
     }
   }
+
+  // Future<List<Guide>> getGuideData() async {
+  //   try {
+  //     final response = await http.get(Uri.parse('$baseUrl/read'));
+
+  //     if (response.statusCode == 200) {
+  //       List data = json.decode(response.body);
+  //       // data.printInfo();
+  //       print(data.toString());
+  //       return data.map((item) => Guide.fromMap(item)).toList();
+  //     } else {
+  //       print('Echec de la requete 2 :${response.statusCode}');
+  //       throw Exception(
+  //           'Réponse inattendue avec le code d\'état dans guide: ${response.statusCode}');
+  //     }
+  //   } catch (e) {
+  //     print('Erreur lors de la récupération des données: $e');
+  //     throw Exception('Erreur lors de la récupération des données guides: $e');
+  //   }
+  // }
 }

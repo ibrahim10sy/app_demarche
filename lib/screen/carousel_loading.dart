@@ -1,4 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:demarche_app/screen/guide_screen.dart';
 import 'package:flutter/material.dart';
 
 class CarouselLoading extends StatefulWidget {
@@ -17,15 +18,20 @@ class _CarouselLoadingState extends State<CarouselLoading> {
     {"id": 2, "image_path": 'assets/images/image16.png'},
     {"id": 3, "image_path": 'assets/images/logo.png'}
   ];
+
   final CarouselController carouselController = CarouselController();
   int currentIndex = 0;
+
+  @override
+  void initState() {}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
         children: [
           Opacity(
-            opacity: 0.8,
+            opacity: 0.9,
             child: Container(
               width: double.infinity,
               height: 155,
@@ -34,7 +40,7 @@ class _CarouselLoadingState extends State<CarouselLoading> {
                 boxShadow: [
                   BoxShadow(
                       offset: Offset(0.0, 0.0),
-                      blurRadius: 7.0,
+                      blurRadius: 5.0,
                       color: Color.fromRGBO(
                           0, 0, 0, 0.25) //Color.fromRGBO(47, 144, 98, 1)
                       )
@@ -215,11 +221,19 @@ class _CarouselLoadingState extends State<CarouselLoading> {
                       );
                     }).toList(),
                   )),
-              const Column()
+              const SizedBox(
+                height: 10,
+              ),
             ],
-          )
+          ),
+          const SizedBox(
+            height: 20 ,
+          ),
+          const GuideScreen()
         ],
       ),
     );
   }
 }
+
+
