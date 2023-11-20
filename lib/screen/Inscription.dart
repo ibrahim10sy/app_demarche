@@ -5,7 +5,7 @@ import 'package:demarche_app/model/Utilisateur.dart';
 import 'package:demarche_app/provider/utilisateurProvider.dart';
 import 'package:demarche_app/screen/accueil.dart';
 import 'package:demarche_app/screen/connexion_screen.dart';
-import 'package:demarche_app/screen/home.dart';
+import 'package:demarche_app/screen/Home.dart';
 import 'package:demarche_app/screen/nav.dart';
 import 'package:demarche_app/service/utilisateurService.dart';
 import 'package:flutter/material.dart';
@@ -420,7 +420,7 @@ class _InscriptionState extends State<Inscription> {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: ((context) => home())));
+                                        builder: ((context) => Home())));
                               } catch (e) {
                                 throw new Exception(
                                     'Impossible de créer un compte $e');

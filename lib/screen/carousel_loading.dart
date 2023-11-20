@@ -185,8 +185,9 @@ class _CarouselLoadingState extends State<CarouselLoading> {
               ),
             ),
           ),
-          const SizedBox(
-            height: 10,
+          const Divider(
+            height: 5,
+            color: d_red,
           ),
           Stack(
             children: [

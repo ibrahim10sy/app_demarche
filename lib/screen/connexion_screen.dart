@@ -4,9 +4,7 @@ import 'package:demarche_app/delayed_animation.dart';
 import 'package:demarche_app/model/Utilisateur.dart';
 import 'package:demarche_app/provider/utilisateurProvider.dart';
 import 'package:demarche_app/screen/Inscription.dart';
-import 'package:demarche_app/screen/accueil.dart';
-import 'package:demarche_app/screen/home.dart';
-import 'package:demarche_app/service/utilisateurService.dart';
+import 'package:demarche_app/screen/Home.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
@@ -36,7 +34,7 @@ class _Connexion_ScreenState extends State<Connexion_Screen> {
     final String motDePasse = motDePasseController.text;
     const String baseUrl = 'http://10.0.2.2:8080/utilisateur';
 
-     UtilisateurProvider utilisateurprovider =
+    UtilisateurProvider utilisateurprovider =
         Provider.of<UtilisateurProvider>(context, listen: false);
 
     if (email.isEmpty || motDePasse.isEmpty) {
@@ -61,19 +59,17 @@ class _Connexion_ScreenState extends State<Connexion_Screen> {
       return;
     }
 
-      const String endpoint = '/login';
+    const String endpoint = '/login';
     final Uri apiUrl =
         Uri.parse('$baseUrl$endpoint?email=$email&motDePasse=$motDePasse');
 
-
-     try {
+    try {
       final response = await http.post(
         apiUrl,
         headers: {
           'Content-Type': 'application/json',
         },
       );
-
 
       if (response.statusCode == 200) {
         final responseBody = json.decode(utf8.decode(response.bodyBytes));
@@ -90,7 +86,8 @@ class _Connexion_ScreenState extends State<Connexion_Screen> {
         );
 
         utilisateurprovider.setUtilisateur(utilisateur);
-       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> const home()));
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => const Home()));
       } else {
         final responseBody = json.decode(response.body);
         final errorMessage = responseBody['message'];
@@ -292,7 +289,7 @@ class _Connexion_ScreenState extends State<Connexion_Screen> {
                             //         Navigator.push(
                             //           context,
                             //           MaterialPageRoute(
-                            //               builder: ((context) => home())));
+                            //               builder: ((context) => Home())));
                             //     } catch (e) {
                             //       showDialog(
                             //         context: context,
