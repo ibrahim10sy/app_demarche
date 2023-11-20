@@ -2,7 +2,7 @@ import 'package:demarche_app/model/Utilisateur.dart';
 import 'package:flutter/foundation.dart';
 
 
-class utilisateurProvider with ChangeNotifier {
+class UtilisateurProvider with ChangeNotifier {
   Utilisateur? _utilisateur;
 
   Utilisateur? get utilisateur => _utilisateur;

@@ -36,7 +36,7 @@ class _NavState extends State<Nav> {
       body: Center(child: _listTab.elementAt(_selectedIndex)),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: const Color.fromARGB(255, 245, 242, 242),
-        elevation: 12.0, // Augmentation de l'élévation
+        elevation: 12.0,
 
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(

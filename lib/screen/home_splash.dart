@@ -1,6 +1,5 @@
 import 'package:demarche_app/delayed_animation.dart';
 import 'package:demarche_app/screen/Inscription.dart';
-import 'package:demarche_app/screen/commence_screen.dart';
 import 'package:demarche_app/screen/connexion_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';

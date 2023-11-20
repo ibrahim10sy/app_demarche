@@ -1,6 +1,9 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:demarche_app/model/Utilisateur.dart';
+import 'package:demarche_app/provider/utilisateurProvider.dart';
 import 'package:demarche_app/screen/guide_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CarouselLoading extends StatefulWidget {
   const CarouselLoading({super.key});
@@ -14,16 +17,24 @@ bool isDark = false;
 
 class _CarouselLoadingState extends State<CarouselLoading> {
   List imageList = [
-    {"id": 1, "image_path": 'assets/images/image15.png'},
-    {"id": 2, "image_path": 'assets/images/image16.png'},
-    {"id": 3, "image_path": 'assets/images/logo.png'}
+    {"id": 1, "image_path": 'assets/images/mali.jpg'},
+    {"id": 2, "image_path": 'assets/images/orange1.png'},
+    {
+      "id": 3,
+      "image_path": 'assets/images/tas-bitcoins-au-dessus-billets-dollars.jpg'
+    }
   ];
 
   final CarouselController carouselController = CarouselController();
   int currentIndex = 0;
+  late Utilisateur utilisateur;
 
   @override
-  void initState() {}
+  void initState() {
+    utilisateur =
+        Provider.of<UtilisateurProvider>(context, listen: false).utilisateur!;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,48 +59,59 @@ class _CarouselLoadingState extends State<CarouselLoading> {
               ),
               child: Column(
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(15.0),
-                        child: const Row(
-                          children: [
-                            CircleAvatar(
-                              backgroundColor: d_red,
-                              radius: 25,
-                              child: Text(
-                                "IS",
-                                style: TextStyle(
-                                  fontSize: 25,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                  letterSpacing: 2,
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Consumer<UtilisateurProvider>(
+                            builder: (context, utilisateurprovider, child) {
+                          final user = utilisateurprovider.utilisateur;
+                          return Row(
+                            children: [
+                              user?.image == null ||
+                                      user?.image?.isEmpty == true
+                                  ? CircleAvatar(
+                                      backgroundColor: d_red,
+                                      radius: 28,
+                                      child: Text(
+                                        "${user!.prenom.substring(0, 1).toUpperCase()}${user.nom.substring(0, 1).toUpperCase()}",
+                                        style: const TextStyle(
+                                            fontSize: 25,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white,
+                                            letterSpacing: 2),
+                                      ),
+                                    )
+                                  : CircleAvatar(
+                                      backgroundImage:
+                                          NetworkImage(user!.image!),
+                                      radius: 28,
+                                    ),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
+                                child: Text(
+                                  "${user.prenom.toUpperCase()} ${user.nom.toUpperCase()} ",
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 15,
-                            ),
-                            Text(
-                              'Ibrahim SY',
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                      IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.add_alert,
-                          color: d_red,
-                          size: 28,
-                        ),
-                      ),
-                    ],
+                              )
+                            ],
+                          );
+                        }),
+                        const IconButton(
+                          onPressed: null,
+                          icon: Icon(
+                            Icons.circle_notifications_sharp,
+                            color: d_red, // Set the icon color
+                            size: 40.0, // Set the icon size
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                   const SizedBox(
                     height: 8.0,
@@ -98,6 +120,15 @@ class _CarouselLoadingState extends State<CarouselLoading> {
                     child: Padding(
                       padding: const EdgeInsets.all(5.0),
                       child: SearchAnchor(
+                        viewHintText: 'Rechercher ...',
+                        isFullScreen: false,
+                        // viewBackgroundColor:
+                        //     const Color.fromARGB(255, 234, 204, 146),
+                        viewElevation: 150,
+                        dividerColor: d_red,
+                        viewConstraints: const BoxConstraints(
+                          maxHeight: 300,
+                        ),
                         builder: (BuildContext context,
                             SearchController controller) {
                           return SearchBar(
@@ -227,7 +258,7 @@ class _CarouselLoadingState extends State<CarouselLoading> {
             ],
           ),
           const SizedBox(
-            height: 20 ,
+            height: 20,
           ),
           const GuideScreen()
         ],
@@ -235,5 +266,3 @@ class _CarouselLoadingState extends State<CarouselLoading> {
     );
   }
 }
-
-

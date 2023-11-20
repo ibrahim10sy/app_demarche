@@ -1,7 +1,15 @@
+import 'dart:convert';
+
 import 'package:demarche_app/delayed_animation.dart';
+import 'package:demarche_app/model/Utilisateur.dart';
+import 'package:demarche_app/provider/utilisateurProvider.dart';
 import 'package:demarche_app/screen/Inscription.dart';
+import 'package:demarche_app/screen/accueil.dart';
 import 'package:demarche_app/screen/home.dart';
+import 'package:demarche_app/service/utilisateurService.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 class Connexion_Screen extends StatefulWidget {
   const Connexion_Screen({super.key});
@@ -14,6 +22,101 @@ const d_red = Color.fromRGBO(28, 36, 129, 10);
 
 class _Connexion_ScreenState extends State<Connexion_Screen> {
   final _formKey = GlobalKey<FormState>();
+  // final email_controller = TextEditingController();
+  // final mdp_controller = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController motDePasseController = TextEditingController();
+
+  String name = '';
+  String email = '';
+  String image = '';
+  //methode de connexion
+  Future<void> loginUser() async {
+    final String email = emailController.text;
+    final String motDePasse = motDePasseController.text;
+    const String baseUrl = 'http://10.0.2.2:8080/utilisateur';
+
+     UtilisateurProvider utilisateurprovider =
+        Provider.of<UtilisateurProvider>(context, listen: false);
+
+    if (email.isEmpty || motDePasse.isEmpty) {
+      const String errorMessage = "Veillez remplir tout les champs ";
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Center(child: Text('Erreur')),
+            content: const Text(errorMessage),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+      return;
+    }
+
+      const String endpoint = '/login';
+    final Uri apiUrl =
+        Uri.parse('$baseUrl$endpoint?email=$email&motDePasse=$motDePasse');
+
+
+     try {
+      final response = await http.post(
+        apiUrl,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      );
+
+
+      if (response.statusCode == 200) {
+        final responseBody = json.decode(utf8.decode(response.bodyBytes));
+        emailController.clear();
+        motDePasseController.clear();
+
+        Utilisateur utilisateur = Utilisateur(
+          nom: responseBody['nom'],
+          prenom: responseBody['prenom'],
+          image: responseBody['image'],
+          motDePasse: motDePasse,
+          email: email,
+          idUtilisateur: responseBody['idUtilisateur'],
+        );
+
+        utilisateurprovider.setUtilisateur(utilisateur);
+       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> const home()));
+      } else {
+        final responseBody = json.decode(response.body);
+        final errorMessage = responseBody['message'];
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Center(child: Text('Connexion echouer !')),
+              content: Text(errorMessage),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
+      }
+    } catch (e) {
+      print('Erreur de connexion: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,11 +136,6 @@ class _Connexion_ScreenState extends State<Connexion_Screen> {
                   Navigator.pop(context);
                 },
               ),
-              // const Expanded(
-              //   child: Text(
-              //     'Retour',
-              //   ),
-              // )
             ],
           ),
         ),
@@ -76,12 +174,13 @@ class _Connexion_ScreenState extends State<Connexion_Screen> {
                 key: _formKey,
                 child: Column(
                   children: [
-                    const Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 40, vertical: 16),
+                    Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 40, vertical: 16),
                         child: TextField(
-                          style: TextStyle(fontSize: 18.0),
-                          decoration: InputDecoration(
+                          controller: emailController,
+                          style: const TextStyle(fontSize: 18.0),
+                          decoration: const InputDecoration(
                             contentPadding: EdgeInsets.all(18.0),
                             hintText: 'Nom d\'utilisateur ou email',
                             prefixIcon: Icon(
@@ -96,12 +195,14 @@ class _Connexion_ScreenState extends State<Connexion_Screen> {
                             ),
                           ),
                         )),
-                    const Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 40, vertical: 0),
+                    Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 40, vertical: 0),
                         child: TextField(
-                          style: TextStyle(fontSize: 18.0),
-                          decoration: InputDecoration(
+                          controller: motDePasseController,
+                          obscureText: true,
+                          style: const TextStyle(fontSize: 18.0),
+                          decoration: const InputDecoration(
                             contentPadding: EdgeInsets.all(18.0),
                             hintText: 'Mot de passe',
                             prefixIcon: Icon(
@@ -148,30 +249,86 @@ class _Connexion_ScreenState extends State<Connexion_Screen> {
                     SizedBox(
                       width: double.infinity,
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 40, vertical: 15),
-                        child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const home()));
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor:
-                                const Color.fromRGBO(28, 36, 129, 1.0),
-                            // shape: const StadiumBorder(),
-                            padding: const EdgeInsets.all(17),
-                          ),
-                          child: const Text(
-                            'Connexion',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 40, vertical: 15),
+                          child: ElevatedButton(
+                            onPressed: loginUser,
+
+                            // onPressed: () async {
+                            //   String email = email_controller.text;
+                            //   String mdp = mdp_controller.text;
+
+                            //   if (email.isEmpty || mdp.isEmpty) {
+                            //     showDialog(
+                            //       context: context,
+                            //       builder: (BuildContext context) {
+                            //         return AlertDialog(
+                            //           title: const Text(
+                            //               'Erreur dans le formulaire'),
+                            //           content: const Text(
+                            //               'Veuillez remplir tous les champs'),
+                            //           actions: [
+                            //             TextButton(
+                            //               onPressed: () {
+                            //                 Navigator.of(context).pop();
+                            //               },
+                            //               child: const Text('OK'),
+                            //             )
+                            //           ],
+                            //         );
+                            //       },
+                            //     );
+                            //   } else {
+                            //     try {
+                            //       Utilisateur utilisateur =
+                            //           await UtilisateurService.connexion(
+                            //         email: email,
+                            //         motDePasse: mdp,
+                            //       );
+                            //       print(utilisateur.toString());
+                            //       Provider.of<utilisateurProvider>(context,
+                            //               listen: false)
+                            //           .setUtilisateur(utilisateur);
+                            //         Navigator.push(
+                            //           context,
+                            //           MaterialPageRoute(
+                            //               builder: ((context) => home())));
+                            //     } catch (e) {
+                            //       showDialog(
+                            //         context: context,
+                            //         builder: (BuildContext context) {
+                            //           return AlertDialog(
+                            //             title:
+                            //                 const Text('Erreur de connexion'),
+                            //             content: Text(
+                            //                 'Erreur lors de la connexion : $e'),
+                            //             actions: [
+                            //               TextButton(
+                            //                 onPressed: () {
+                            //                   Navigator.of(context).pop();
+                            //                 },
+                            //                 child: const Text('OK'),
+                            //               )
+                            //             ],
+                            //           );
+                            //         },
+                            //       );
+                            //     }
+                            //   }
+                            // },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  const Color.fromRGBO(28, 36, 129, 1.0),
+                              padding: const EdgeInsets.all(17),
                             ),
-                          ),
-                        ),
-                      ),
+                            child: const Text(
+                              'Connexion',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          )),
                     ),
                     const SizedBox(
                       height: 10,
@@ -190,11 +347,9 @@ class _Connexion_ScreenState extends State<Connexion_Screen> {
                             onPressed: () {
                               print('Bouton pressé!');
                             },
-                            
                             style: ElevatedButton.styleFrom(
                               backgroundColor:
                                   const Color.fromRGBO(28, 36, 129, 1.0),
-                                 
                               padding: const EdgeInsets.all(17),
                             ),
                             child: const Row(

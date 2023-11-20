@@ -2,13 +2,18 @@ import 'dart:io';
 
 import 'package:demarche_app/delayed_animation.dart';
 import 'package:demarche_app/model/Utilisateur.dart';
+import 'package:demarche_app/provider/utilisateurProvider.dart';
+import 'package:demarche_app/screen/accueil.dart';
 import 'package:demarche_app/screen/connexion_screen.dart';
+import 'package:demarche_app/screen/home.dart';
+import 'package:demarche_app/screen/nav.dart';
 import 'package:demarche_app/service/utilisateurService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
 
 class Inscription extends StatefulWidget {
   const Inscription({super.key});
@@ -28,7 +33,7 @@ class _InscriptionState extends State<Inscription> {
   TextEditingController ConfirmerMotDePasse_controller =
       TextEditingController();
   String? imageSrc;
-  File? image;
+  File? images;
 
   Future<void> _pickImage() async {
     try {
@@ -37,7 +42,7 @@ class _InscriptionState extends State<Inscription> {
         final imagePermanent = await saveImagePermanently(image.path);
 
         setState(() {
-          this.image = imagePermanent;
+          this.images = imagePermanent;
           imageSrc = imagePermanent.path;
         });
       } else {
@@ -93,8 +98,8 @@ class _InscriptionState extends State<Inscription> {
                   delay: 1500,
                   child: SizedBox(
                     height: 140,
-                    child: (image != null)
-                        ? Image.file(image!, height: 140)
+                    child: (images != null)
+                        ? Image.file(images!, height: 140)
                         : Image.asset('assets/images/logo.png'),
                   ),
                 ),
@@ -334,11 +339,11 @@ class _InscriptionState extends State<Inscription> {
                             horizontal: 40, vertical: 15),
                         child: ElevatedButton(
                           onPressed: () async {
-                            final nom = nom_controller.text;
-                            final prenom = prenom_controller.text;
-                            final email = email_controller.text;
-                            final motDePasse = motDepasse_controller.text;
-                            final Confirmer =
+                            String nom = nom_controller.text;
+                            String prenom = prenom_controller.text;
+                            String email = email_controller.text;
+                            String motDePasse = motDepasse_controller.text;
+                            String Confirmer =
                                 ConfirmerMotDePasse_controller.text;
 
                             if (nom.isEmpty ||
@@ -385,14 +390,14 @@ class _InscriptionState extends State<Inscription> {
                             } else {
                               Utilisateur nouveauUtilisateur;
                               try {
-                                if (image != null) {
+                                if (images != null) {
                                   nouveauUtilisateur =
                                       await UtilisateurService.creerCompte(
                                           nom: nom,
                                           prenom: prenom,
                                           email: email,
                                           motDePasse: motDePasse,
-                                          image: image as File);
+                                          image: images);
                                 } else {
                                   nouveauUtilisateur =
                                       await UtilisateurService.creerCompte(
@@ -401,8 +406,21 @@ class _InscriptionState extends State<Inscription> {
                                     email: email,
                                     motDePasse: motDePasse,
                                   );
+                                  print(nouveauUtilisateur.toString());
                                 }
-                                debugPrint(nouveauUtilisateur.toString());
+                                Provider.of<UtilisateurProvider>(context,
+                                        listen: false)
+                                    .setUtilisateur(nouveauUtilisateur);
+                                print("New user : ${nouveauUtilisateur.nom}");
+                                nom_controller.clear();
+                                prenom_controller.clear();
+                                email_controller.clear();
+                                motDepasse_controller.clear();
+                                ConfirmerMotDePasse_controller.clear();
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: ((context) => home())));
                               } catch (e) {
                                 throw new Exception(
                                     'Impossible de créer un compte $e');
