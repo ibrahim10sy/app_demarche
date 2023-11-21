@@ -17,6 +17,7 @@ class _GuideScreenState extends State<GuideScreen> {
 
   @override
   void initState() {
+    super.initState();
     _futureListGuide = getGuide();
   }
 

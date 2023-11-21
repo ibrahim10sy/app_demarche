@@ -2,19 +2,30 @@ import 'package:demarche_app/model/Document.dart';
 import 'package:flutter/material.dart';
 
 class DocumentScreen extends StatefulWidget {
-  const DocumentScreen({super.key});
+  late Document document;
+
+  DocumentScreen({super.key, required this.document});
 
   @override
   State<DocumentScreen> createState() => _DocumentScreenState();
 }
-late List<Document> documentsListe = [];
-late Future<List<Document>> _documents;
+
+late Document documents;
 
 class _DocumentScreenState extends State<DocumentScreen> {
   @override
+  void initState() {
+    documents = widget.document;
+    debugPrint("doc recup ! $documents");
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(body: SingleChildScrollView(
-      child: Text('database screen'),
-    ),);
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Text('database screen'),
+      ),
+    );
   }
 }

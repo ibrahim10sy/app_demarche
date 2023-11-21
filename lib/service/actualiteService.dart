@@ -6,23 +6,23 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 class ActualiteService {
-  static var client = http.Client();
+  final String baseUrl = "http://10.0.2.2:8080/Actualite/read";
 
-  static Future<dynamic> getActualite() async {
-    try {
-      var response = await client.get(
-        Uri.parse('http://10.0.2.2//Actualite/read'),
-      );
-      if (response.statusCode == 200) {
-        response.printInfo();
-        return jsonDecode(response.body);
-      }else{
-         print(
-            'Échec de la requête avec l\'actualite: ${response.statusCode}');
-      }
-    } catch (e) {
-       print('Erreur lors de la récupération des données: $e');
-      throw Exception('Erreur lors de la récupération des données de l\'actualite: $e');
+  List<Actualites> actualite = [];
+
+  Future<List<Actualites>> fetchActualite() async {
+    final response = await http.get(Uri.parse(baseUrl));
+
+    if (response.statusCode == 200) {
+      List<dynamic> body = jsonDecode(utf8.decode(response.bodyBytes));
+      actualite = body.map((item) => Actualites.fromMap(item)).toList();
+      print('Resultat attendue : ${response.statusCode}');
+      actualite.printInfo();
+      return actualite;
+    } else {
+      actualite = [];
+      print("Echec de la requête : ${response.statusCode}");
+      throw Exception(jsonDecode(utf8.decode(response.bodyBytes)));
     }
   }
 }

@@ -33,6 +33,7 @@ class _CarouselLoadingState extends State<CarouselLoading> {
   void initState() {
     utilisateur =
         Provider.of<UtilisateurProvider>(context, listen: false).utilisateur!;
+        debugPrint("user recuperation : $utilisateur");
     super.initState();
   }
 

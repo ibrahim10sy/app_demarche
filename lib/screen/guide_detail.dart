@@ -1,5 +1,7 @@
+
 import 'package:demarche_app/model/Document.dart';
 import 'package:demarche_app/model/Guide.dart';
+import 'package:demarche_app/screen/document_screen.dart';
 import 'package:demarche_app/screen/home.dart';
 import 'package:demarche_app/service/guideService.dart';
 import 'package:flutter/material.dart';
@@ -93,17 +95,17 @@ class _GuideDetailState extends State<GuideDetail> {
                             child: Text(snapshot.error.toString()),
                           );
                         }
-
+            
                         if (!snapshot.hasData) {
                           return const Center(
                             child: Text("Aucune donné trouvé !"),
                           );
                         }
-
+            
                         documentsListe = snapshot.data!;
-
+            
                         return Container(
-                          height: 450,
+                            height: 450,
                           width: 300,
                           decoration: BoxDecoration(
                               color: Colors.white,
@@ -116,6 +118,29 @@ class _GuideDetailState extends State<GuideDetail> {
                                   offset: const Offset(0, 3),
                                 )
                               ]),
+                          child: ListView.builder(
+                            itemCount: documentsListe.length,
+                            itemBuilder: (context, index) {
+                              return ListTile(
+                                  title: Text(documentsListe[index].nom,
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18)),
+                                  trailing: IconButton(
+                                    onPressed: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  DocumentScreen(document: documentsListe[index])));
+                                    },
+                                    icon: const Icon(
+                                      Icons.info,
+                                      size: 22,
+                                    ),
+                                  ));
+                            },
+                          ),
                         );
                       })),
             )

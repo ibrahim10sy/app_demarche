@@ -31,8 +31,8 @@ class UtilisateurService extends ChangeNotifier {
         ));
       }
 
-      // Définir les en-têtes de la requête, par exemple, le type de contenu
-      requete.headers['Content-Type'] = 'application/json';
+      
+      // requete.headers['Content-Type'] = 'application/json';
 
       // Encoder les données de l'utilisateur en JSON et les ajouter aux champs de la requête
       requete.fields['utilisateur'] = jsonEncode({
@@ -43,20 +43,21 @@ class UtilisateurService extends ChangeNotifier {
         'image': "",
       });
 
-      var reponse = await requete.send();
-
-      if (reponse.statusCode == 200 || reponse.statusCode == 201) {
+      var response = await requete.send();
+      var responsed = await http.Response.fromStream(response);
+      if (response.statusCode == 200 || response.statusCode == 201) {
         final donneesReponse =
-            json.decode(await reponse.stream.bytesToString());
+            json.decode(responsed.body);
+            // debugPrint(responsed.body);
 
-        return Utilisateur.fromJson(donneesReponse);
+        return Utilisateur.fromMap(donneesReponse);
       } else {
-        // Gérer le code d'état non-200
+       
         throw Exception(
-            'Échec de la requête avec le code d\'état : ${reponse.statusCode}');
+            'Échec de la requête avec le code d\'état : ${responsed.statusCode}');
       }
     } catch (e) {
-      // Gérer les erreurs générales
+     
       throw Exception(
           'Une erreur s\'est produite lors de l\'ajout de l\'utilisateur : $e');
     }

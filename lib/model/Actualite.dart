@@ -1,7 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-class Actualite {
+class Actualites {
   final int? idActualite;
   final String libelle;
   final String image;
@@ -9,7 +9,7 @@ class Actualite {
   final DateTime dateDebut;
   final DateTime dateFin;
   
-  Actualite({
+  Actualites({
     this.idActualite,
     required this.libelle,
     required this.image,
@@ -17,10 +17,10 @@ class Actualite {
     required this.dateDebut,
     required this.dateFin,
   });
-
+  
  
 
-  Actualite copyWith({
+  Actualites copyWith({
     int? idActualite,
     String? libelle,
     String? image,
@@ -28,7 +28,7 @@ class Actualite {
     DateTime? dateDebut,
     DateTime? dateFin,
   }) {
-    return Actualite(
+    return Actualites(
       idActualite: idActualite ?? this.idActualite,
       libelle: libelle ?? this.libelle,
       image: image ?? this.image,
@@ -49,8 +49,8 @@ class Actualite {
     };
   }
 
-  factory Actualite.fromMap(Map<String, dynamic> map) {
-    return Actualite(
+  factory Actualites.fromMap(Map<String, dynamic> map) {
+    return Actualites(
       idActualite: map['idActualite'] != null ? map['idActualite'] as int : null,
       libelle: map['libelle'] as String,
       image: map['image'] as String,
@@ -62,15 +62,15 @@ class Actualite {
 
   String toJson() => json.encode(toMap());
 
-  factory Actualite.fromJson(String source) => Actualite.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory Actualites.fromJson(String source) => Actualites.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() {
-    return 'Actualite(idActualite: $idActualite, libelle: $libelle, image: $image, description: $description, dateDebut: $dateDebut, dateFin: $dateFin)';
+    return 'Actualites(idActualite: $idActualite, libelle: $libelle, image: $image, description: $description, dateDebut: $dateDebut, dateFin: $dateFin)';
   }
 
   @override
-  bool operator ==(covariant Actualite other) {
+  bool operator ==(covariant Actualites other) {
     if (identical(this, other)) return true;
   
     return 

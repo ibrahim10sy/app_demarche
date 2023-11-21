@@ -3,11 +3,10 @@ import 'dart:io';
 import 'package:demarche_app/delayed_animation.dart';
 import 'package:demarche_app/model/Utilisateur.dart';
 import 'package:demarche_app/provider/utilisateurProvider.dart';
-import 'package:demarche_app/screen/accueil.dart';
-import 'package:demarche_app/screen/connexion_screen.dart';
 import 'package:demarche_app/screen/Home.dart';
-import 'package:demarche_app/screen/nav.dart';
+import 'package:demarche_app/screen/connexion_screen.dart';
 import 'package:demarche_app/service/utilisateurService.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -33,7 +32,10 @@ class _InscriptionState extends State<Inscription> {
   TextEditingController ConfirmerMotDePasse_controller =
       TextEditingController();
   String? imageSrc;
-  File? images;
+  File? photo;
+  String _errorMessage = '';
+
+ 
 
   Future<void> _pickImage() async {
     try {
@@ -42,7 +44,7 @@ class _InscriptionState extends State<Inscription> {
         final imagePermanent = await saveImagePermanently(image.path);
 
         setState(() {
-          this.images = imagePermanent;
+          photo = imagePermanent;
           imageSrc = imagePermanent.path;
         });
       } else {
@@ -62,6 +64,7 @@ class _InscriptionState extends State<Inscription> {
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
         backgroundColor: const Color.fromARGB(255, 245, 242, 242),
         appBar: AppBar(
@@ -92,15 +95,17 @@ class _InscriptionState extends State<Inscription> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                margin:
-                    const EdgeInsets.symmetric(vertical: 35, horizontal: 118),
+                // margin:
+                //     const EdgeInsets.symmetric(vertical: 35, horizontal: 118),
                 child: DelayedAnimation(
                   delay: 1500,
                   child: SizedBox(
                     height: 140,
-                    child: (images != null)
-                        ? Image.file(images!, height: 140)
-                        : Image.asset('assets/images/logo.png'),
+                    child: Center(
+                      child: (photo != null)
+                          ? Image.file(photo!)
+                          : Image.asset('assets/images/logo.png'),
+                    ),
                   ),
                 ),
               ),
@@ -245,8 +250,12 @@ class _InscriptionState extends State<Inscription> {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 40, vertical: 16),
                         child: TextField(
+                          keyboardType: TextInputType.emailAddress,
                           controller: email_controller,
                           style: const TextStyle(fontSize: 18.0),
+                          onChanged: (val) {
+                            validateEmail(val);
+                          },
                           decoration: const InputDecoration(
                             contentPadding: EdgeInsets.all(18.0),
                             labelText: 'Email ',
@@ -280,6 +289,7 @@ class _InscriptionState extends State<Inscription> {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 40, vertical: 16),
                         child: TextField(
+                          obscureText: true,
                           controller: motDepasse_controller,
                           style: const TextStyle(fontSize: 18.0),
                           decoration: const InputDecoration(
@@ -315,6 +325,7 @@ class _InscriptionState extends State<Inscription> {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 40, vertical: 16),
                         child: TextField(
+                          obscureText: true,
                           controller: ConfirmerMotDePasse_controller,
                           style: const TextStyle(fontSize: 18.0),
                           decoration: const InputDecoration(
@@ -345,6 +356,10 @@ class _InscriptionState extends State<Inscription> {
                             String motDePasse = motDepasse_controller.text;
                             String Confirmer =
                                 ConfirmerMotDePasse_controller.text;
+
+                               UtilisateurProvider utilisateurprovider =
+                                Provider.of<UtilisateurProvider>(context,
+                                    listen: false);
 
                             if (nom.isEmpty ||
                                 prenom.isEmpty ||
@@ -390,14 +405,14 @@ class _InscriptionState extends State<Inscription> {
                             } else {
                               Utilisateur nouveauUtilisateur;
                               try {
-                                if (images != null) {
+                                if (photo != null) {
                                   nouveauUtilisateur =
                                       await UtilisateurService.creerCompte(
                                           nom: nom,
                                           prenom: prenom,
                                           email: email,
                                           motDePasse: motDePasse,
-                                          image: images);
+                                          image: photo as File);
                                 } else {
                                   nouveauUtilisateur =
                                       await UtilisateurService.creerCompte(
@@ -408,21 +423,31 @@ class _InscriptionState extends State<Inscription> {
                                   );
                                   print(nouveauUtilisateur.toString());
                                 }
-                                Provider.of<UtilisateurProvider>(context,
-                                        listen: false)
-                                    .setUtilisateur(nouveauUtilisateur);
-                                print("New user : ${nouveauUtilisateur.nom}");
-                                nom_controller.clear();
-                                prenom_controller.clear();
-                                email_controller.clear();
-                                motDepasse_controller.clear();
-                                ConfirmerMotDePasse_controller.clear();
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: ((context) => Home())));
+
+                               utilisateurprovider.setUtilisateur(nouveauUtilisateur);
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        title: const Text('Succèss'),
+                                        content: const Text(
+                                            'Compte créer avec succèss'),
+                                        actions: <Widget>[
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          const Home()));
+                                            },
+                                            child: const Text('OK'),
+                                          ),
+                                        ],
+                                      );
+                                    });
                               } catch (e) {
-                                throw new Exception(
+                                throw Exception(
                                     'Impossible de créer un compte $e');
                               }
                             }
@@ -441,6 +466,14 @@ class _InscriptionState extends State<Inscription> {
                             ),
                           ),
                         ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        textAlign: TextAlign.center,
+                        _errorMessage,
+                        style: const TextStyle(color: Colors.red),
                       ),
                     ),
                     Padding(
@@ -479,5 +512,21 @@ class _InscriptionState extends State<Inscription> {
             ],
           ),
         ));
+  }
+
+  void validateEmail(String val) {
+    if (val.isEmpty) {
+      setState(() {
+        _errorMessage = "Email ne doit pas être vide";
+      });
+    } else if (!EmailValidator.validate(val, true)) {
+      setState(() {
+        _errorMessage = "Email non valide";
+      });
+    } else {
+      setState(() {
+        _errorMessage = "";
+      });
+    }
   }
 }
