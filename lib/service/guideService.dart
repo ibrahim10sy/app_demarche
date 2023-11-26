@@ -20,7 +20,7 @@ class GuideService {
       List<dynamic> body = jsonDecode(utf8.decode(response.bodyBytes));
       guides = body.map((item) => Guide.fromMap(item)).toList();
       print('Resultat attendue : ${response.statusCode}');
-      debugPrint('docservice $response.body');
+      debugPrint('docservice ${response.body}');
       return guides;
     } else {
       guides = [];

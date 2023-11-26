@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:demarche_app/delayed_animation.dart';
 import 'package:demarche_app/model/Utilisateur.dart';
 import 'package:demarche_app/provider/utilisateurProvider.dart';
-import 'package:demarche_app/screen/Inscription.dart';
 import 'package:demarche_app/screen/Home.dart';
+import 'package:demarche_app/screen/Inscription.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
@@ -250,70 +250,8 @@ class _Connexion_ScreenState extends State<Connexion_Screen> {
                               horizontal: 40, vertical: 15),
                           child: ElevatedButton(
                             onPressed: loginUser,
-
-                            // onPressed: () async {
-                            //   String email = email_controller.text;
-                            //   String mdp = mdp_controller.text;
-
-                            //   if (email.isEmpty || mdp.isEmpty) {
-                            //     showDialog(
-                            //       context: context,
-                            //       builder: (BuildContext context) {
-                            //         return AlertDialog(
-                            //           title: const Text(
-                            //               'Erreur dans le formulaire'),
-                            //           content: const Text(
-                            //               'Veuillez remplir tous les champs'),
-                            //           actions: [
-                            //             TextButton(
-                            //               onPressed: () {
-                            //                 Navigator.of(context).pop();
-                            //               },
-                            //               child: const Text('OK'),
-                            //             )
-                            //           ],
-                            //         );
-                            //       },
-                            //     );
-                            //   } else {
-                            //     try {
-                            //       Utilisateur utilisateur =
-                            //           await UtilisateurService.connexion(
-                            //         email: email,
-                            //         motDePasse: mdp,
-                            //       );
-                            //       print(utilisateur.toString());
-                            //       Provider.of<utilisateurProvider>(context,
-                            //               listen: false)
-                            //           .setUtilisateur(utilisateur);
-                            //         Navigator.push(
-                            //           context,
-                            //           MaterialPageRoute(
-                            //               builder: ((context) => Home())));
-                            //     } catch (e) {
-                            //       showDialog(
-                            //         context: context,
-                            //         builder: (BuildContext context) {
-                            //           return AlertDialog(
-                            //             title:
-                            //                 const Text('Erreur de connexion'),
-                            //             content: Text(
-                            //                 'Erreur lors de la connexion : $e'),
-                            //             actions: [
-                            //               TextButton(
-                            //                 onPressed: () {
-                            //                   Navigator.of(context).pop();
-                            //                 },
-                            //                 child: const Text('OK'),
-                            //               )
-                            //             ],
-                            //           );
-                            //         },
-                            //       );
-                            //     }
-                            //   }
-                            // },
                             style: ElevatedButton.styleFrom(
+                              shape: const StadiumBorder(),
                               backgroundColor:
                                   const Color.fromRGBO(28, 36, 129, 1.0),
                               padding: const EdgeInsets.all(17),
@@ -345,6 +283,7 @@ class _Connexion_ScreenState extends State<Connexion_Screen> {
                               print('Bouton pressé!');
                             },
                             style: ElevatedButton.styleFrom(
+                              shape: const StadiumBorder(),
                               backgroundColor:
                                   const Color.fromRGBO(28, 36, 129, 1.0),
                               padding: const EdgeInsets.all(17),

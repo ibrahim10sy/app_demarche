@@ -51,50 +51,50 @@ class _GuideScreenState extends State<GuideScreen> {
 
           guidesListe = snapshot.data!;
 
-          return Wrap(
-            spacing: 10,
-            runSpacing: 10,
-            children: guidesListe.map((Guide guide) {
-              return GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => GuideDetail(guide: guide)));
-                },
-                child: Container(
-                  width: 150,
-                  height: 150,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.white,
-                    boxShadow: const [
-                      BoxShadow(
-                          offset: Offset(0.0, 0.0),
-                          blurRadius: 5.0,
-                          color: Color.fromRGBO(
-                              0, 0, 0, 0.38) //Color.fromRGBO(47, 144, 98, 1)
-                          )
-                    ],
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.network(guide.image!),
-                      const SizedBox(height: 20),
-                      Text(
-                        textAlign: TextAlign.center,
-                        guide.libelle,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
+          return Center(
+            child: Wrap(
+              spacing: 10,
+              runSpacing: 10,
+              children: guidesListe.map((Guide guide) {
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => GuideDetail(guide: guide)));
+                  },
+                  child: Container(
+                    width: 150,
+                    height: 150,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.white,
+                      boxShadow: const [
+                        BoxShadow(
+                            offset: Offset(0.0, 0.0),
+                            blurRadius: 5.0,
+                            color: Color.fromRGBO(0, 0, 0, 0.38))
+                      ],
+                    ),
+                    child: ListView(
+                      // mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.network("http://10.0.2.2/${guide.image!}"),
+                        const SizedBox(height: 20),
+                        Text(
+                          textAlign: TextAlign.center,
+                          guide.libelle,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              );
-            }).toList(),
+                );
+              }).toList(),
+            ),
           );
         },
       ),

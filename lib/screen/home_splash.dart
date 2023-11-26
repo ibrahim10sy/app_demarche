@@ -22,7 +22,7 @@ class Home_splash extends StatelessWidget {
         child: Column(
           children: [
             DelayedAnimation(
-              delay: 1500,
+              delay: 1000,
               child: SizedBox(
                 height: 270,
                 child: Image.asset('assets/images/logo.png'),
@@ -42,7 +42,7 @@ class Home_splash extends StatelessWidget {
               )),
             ),
             DelayedAnimation(
-              delay: 3500,
+              delay: 1800,
               child: Container(
                 margin: const EdgeInsets.only(
                   top: 35,

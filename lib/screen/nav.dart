@@ -20,7 +20,7 @@ class _NavState extends State<Nav> {
     const Accueil(),
     const Localisation(),
     const Actualite(),
-    const Forum()
+    const Forums()
   ];
 
   void _currentIndex(int index) {

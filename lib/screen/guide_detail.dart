@@ -1,4 +1,3 @@
-
 import 'package:demarche_app/model/Document.dart';
 import 'package:demarche_app/model/Guide.dart';
 import 'package:demarche_app/screen/document_screen.dart';
@@ -58,7 +57,7 @@ class _GuideDetailState extends State<GuideDetail> {
                         // scale: 0.7,
                         height: 150,
                         child: Image.network(
-                          guides.image!,
+                          "http://10.0.2.2/${guides.image!}",
                           scale: 0.2,
                         ),
                       ),
@@ -76,49 +75,49 @@ class _GuideDetailState extends State<GuideDetail> {
               ),
             ),
             const SizedBox(
-              height: 10,
+              height: 25,
             ),
             Padding(
               padding: const EdgeInsets.all(15.0),
-              child: Expanded(
-                  child: FutureBuilder(
-                      future: _documents,
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        }
-                        if (snapshot.hasError) {
-                          return Center(
-                            child: Text(snapshot.error.toString()),
-                          );
-                        }
-            
-                        if (!snapshot.hasData) {
-                          return const Center(
-                            child: Text("Aucune donné trouvé !"),
-                          );
-                        }
-            
-                        documentsListe = snapshot.data!;
-            
-                        return Container(
-                            height: 450,
-                          width: 300,
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(15),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.5),
-                                  spreadRadius: 5,
-                                  blurRadius: 7,
-                                  offset: const Offset(0, 3),
-                                )
-                              ]),
-                          child: ListView.builder(
+              child: Container(
+                height: 460,
+                width: 300,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(15),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Color.fromARGB(40, 15, 15, 15),
+                        spreadRadius: 5,
+                        blurRadius: 7,
+                        offset: Offset(0, 3),
+                      )
+                    ]),
+                child: Expanded(
+                    child: FutureBuilder(
+                        future: _documents,
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+                          if (snapshot.hasError) {
+                            return Center(
+                              child: Text(snapshot.error.toString()),
+                            );
+                          }
+
+                          if (!snapshot.hasData) {
+                            return const Center(
+                              child: Text("Aucune donné trouvé !"),
+                            );
+                          }
+
+                          documentsListe = snapshot.data!;
+
+                          return ListView.builder(
                             itemCount: documentsListe.length,
                             itemBuilder: (context, index) {
                               return ListTile(
@@ -132,7 +131,9 @@ class _GuideDetailState extends State<GuideDetail> {
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  DocumentScreen(document: documentsListe[index])));
+                                                  DocumentScreen(
+                                                      document: documentsListe[
+                                                          index])));
                                     },
                                     icon: const Icon(
                                       Icons.info,
@@ -140,9 +141,9 @@ class _GuideDetailState extends State<GuideDetail> {
                                     ),
                                   ));
                             },
-                          ),
-                        );
-                      })),
+                          );
+                        })),
+              ),
             )
           ],
         ),
