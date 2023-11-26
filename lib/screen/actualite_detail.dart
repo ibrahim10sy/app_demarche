@@ -1,9 +1,9 @@
 import 'package:demarche_app/model/Actualite.dart';
-import 'package:demarche_app/screen/actualite.dart';
+import 'package:demarche_app/screen/actualite_screen.dart';
 import 'package:flutter/material.dart';
 
 class ActualiteDetail extends StatefulWidget {
-  final Actualites actualites;
+  final Actualite actualites;
   const ActualiteDetail({super.key, required this.actualites});
 
   @override
@@ -13,7 +13,7 @@ class ActualiteDetail extends StatefulWidget {
 const d_red = Color.fromRGBO(28, 36, 129, 10);
 
 class _ActualiteDetailState extends State<ActualiteDetail> {
-  late Actualites actualite;
+  late Actualite actualite;
 
   @override
   void initState() {
@@ -30,7 +30,17 @@ class _ActualiteDetailState extends State<ActualiteDetail> {
           const SizedBox(
             height: 20,
           ),
-          
+          ClipRRect(
+            borderRadius: BorderRadius.circular(28),
+            //  width: double.infinity,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Image.network(
+                "http://10.0.2.2/${actualite.image}",
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
           const SizedBox(
             height: 10,
           ),
@@ -38,7 +48,7 @@ class _ActualiteDetailState extends State<ActualiteDetail> {
             child: Padding(
               padding: const EdgeInsets.all(20.0),
               child: Container(
-                height: 380,
+                height: 500,
                 width: 300,
                 decoration: BoxDecoration(
                     color: Colors.white,
@@ -86,7 +96,7 @@ class _ActualiteDetailState extends State<ActualiteDetail> {
                       padding: const EdgeInsets.all(10.0),
                       child: Text(
                         // textAlign: TextAlign.justify,
-                        "Date debut : ${actualite.dateFin!}",
+                        "Date debut : ${actualite.dateFin}",
                         style: const TextStyle(
                             fontSize: 20,
                             color: Colors.black,
@@ -100,7 +110,7 @@ class _ActualiteDetailState extends State<ActualiteDetail> {
                       padding: const EdgeInsets.all(10.0),
                       child: Text(
                         // textAlign: TextAlign.justify,
-                        "Date debut : ${actualite.dateDebut!}",
+                        "Date debut : ${actualite.dateDebut}",
                         style: const TextStyle(
                             fontSize: 20,
                             color: Colors.black,
@@ -149,7 +159,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const Actualite()));
+                          builder: (context) => const ActualiteScreen()));
                 },
                 icon: const Icon(Icons.arrow_back_ios),
               ),

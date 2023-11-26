@@ -14,19 +14,18 @@ class _MapPageState extends State<MapPage> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
         body: GoogleMap(
-      initialCameraPosition: CameraPosition(
+      initialCameraPosition: const CameraPosition(
         target: _pGooglePlex,
-        zoom: 13,
+        zoom: 15,
       ),
       markers: {
-        // Marker(
-        //     markerId: MarkerId("_currentLocation"),
-        //     icon: BitmapDescriptor.defaultMarker,
-        //     position: _pGooglePlex)
+        const Marker(
+            markerId: MarkerId("_currentLocation"),
+            icon: BitmapDescriptor.defaultMarker,
+            position: _pGooglePlex)
       },
-    )
-    );
+    ));
   }
 }

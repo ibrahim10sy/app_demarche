@@ -17,7 +17,7 @@ class _LocalisationState extends State<Localisation> {
     return const Scaffold(
       backgroundColor: Color.fromARGB(255, 245, 242, 242),
       appBar: CustomAppBar(),
-      // body: MapPage(),
+      body: MapPage(),
     );
   }
 }

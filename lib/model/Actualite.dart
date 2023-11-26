@@ -1,40 +1,47 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-class Actualites {
-  final int? idActualite;
+import 'package:demarche_app/model/Admin.dart';
+
+class Actualite {
+  final int idActualite;
   final String libelle;
-  final String image;
+  final String? image;
   final String description;
-  final DateTime dateDebut;
-  final DateTime dateFin;
+  final String dateDebut;
+  final String dateFin;
+  final Admin admin;
+
   
-  Actualites({
-    this.idActualite,
+  Actualite({
+    required this.idActualite,
     required this.libelle,
-    required this.image,
+    this.image,
     required this.description,
     required this.dateDebut,
     required this.dateFin,
+    required this.admin,
   });
-  
- 
 
-  Actualites copyWith({
+  
+
+  Actualite copyWith({
     int? idActualite,
     String? libelle,
     String? image,
     String? description,
-    DateTime? dateDebut,
-    DateTime? dateFin,
+    String? dateDebut,
+    String? dateFin,
+    Admin? admin,
   }) {
-    return Actualites(
+    return Actualite(
       idActualite: idActualite ?? this.idActualite,
       libelle: libelle ?? this.libelle,
       image: image ?? this.image,
       description: description ?? this.description,
       dateDebut: dateDebut ?? this.dateDebut,
       dateFin: dateFin ?? this.dateFin,
+      admin: admin ?? this.admin,
     );
   }
 
@@ -44,33 +51,35 @@ class Actualites {
       'libelle': libelle,
       'image': image,
       'description': description,
-      'dateDebut': dateDebut.millisecondsSinceEpoch,
-      'dateFin': dateFin.millisecondsSinceEpoch,
+      'dateDebut': dateDebut,
+      'dateFin': dateFin,
+      'admin': admin.toMap(),
     };
   }
 
-  factory Actualites.fromMap(Map<String, dynamic> map) {
-    return Actualites(
-      idActualite: map['idActualite'] != null ? map['idActualite'] as int : null,
+  factory Actualite.fromMap(Map<String, dynamic> map) {
+    return Actualite(
+      idActualite: map['idActualite'] as int,
       libelle: map['libelle'] as String,
-      image: map['image'] as String,
+      image: map['image'] != null ? map['image'] as String : null,
       description: map['description'] as String,
-      dateDebut: DateTime.fromMillisecondsSinceEpoch(map['dateDebut'] as int),
-      dateFin: DateTime.fromMillisecondsSinceEpoch(map['dateFin'] as int),
+      dateDebut: map['dateDebut'] as String,
+      dateFin: map['dateFin'] as String,
+      admin: Admin.fromMap(map['admin'] as Map<String,dynamic>),
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory Actualites.fromJson(String source) => Actualites.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory Actualite.fromJson(String source) => Actualite.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() {
-    return 'Actualites(idActualite: $idActualite, libelle: $libelle, image: $image, description: $description, dateDebut: $dateDebut, dateFin: $dateFin)';
+    return 'Actualite(idActualite: $idActualite, libelle: $libelle, image: $image, description: $description, dateDebut: $dateDebut, dateFin: $dateFin, admin: $admin)';
   }
 
   @override
-  bool operator ==(covariant Actualites other) {
+  bool operator ==(covariant Actualite other) {
     if (identical(this, other)) return true;
   
     return 
@@ -79,7 +88,8 @@ class Actualites {
       other.image == image &&
       other.description == description &&
       other.dateDebut == dateDebut &&
-      other.dateFin == dateFin;
+      other.dateFin == dateFin &&
+      other.admin == admin;
   }
 
   @override
@@ -89,6 +99,7 @@ class Actualites {
       image.hashCode ^
       description.hashCode ^
       dateDebut.hashCode ^
-      dateFin.hashCode;
+      dateFin.hashCode ^
+      admin.hashCode;
   }
 }

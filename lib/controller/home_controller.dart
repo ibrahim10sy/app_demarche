@@ -6,7 +6,7 @@ import 'package:get_storage/get_storage.dart';
 class HomeController extends GetxController {
   var box = GetStorage();
   var isLoading = false;
-  List<Actualites> carouselData = [];
+  List<Actualite> carouselData = [];
 
   @override
   void onInit() {

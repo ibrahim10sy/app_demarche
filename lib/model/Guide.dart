@@ -1,23 +1,26 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 import 'package:demarche_app/model/Admin.dart';
 
 class Guide {
-  final int? idGuide;
-  final String? image;
-  final String? audio;
-  final String libelle;
-  final String description;
-  final Admin  admin;
+  int idGuide;
+  String image;
+  String audio;
+  String libelle;
+  String description;
+  Admin admin;
+
+
   Guide({
-    this.idGuide,
-    this.image,
-    this.audio,
+    required this.idGuide,
+    required this.image,
+    required this.audio,
     required this.libelle,
     required this.description,
     required this.admin,
   });
+
+ 
 
   Guide copyWith({
     int? idGuide,
@@ -50,9 +53,9 @@ class Guide {
 
   factory Guide.fromMap(Map<String, dynamic> map) {
     return Guide(
-      idGuide: map['idGuide'] != null ? map['idGuide'] as int : null,
-      image: map['image'] != null ? map['image'] as String : null,
-      audio: map['audio'] != null ? map['audio'] as String : null,
+      idGuide: map['idGuide'] as int,
+      image: map['image'] as String,
+      audio: map['audio'] as String,
       libelle: map['libelle'] as String,
       description: map['description'] as String,
       admin: Admin.fromMap(map['admin'] as Map<String,dynamic>),

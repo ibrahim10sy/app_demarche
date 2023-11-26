@@ -44,7 +44,7 @@ class _CarouselLoadingState extends State<CarouselLoading> {
       body: ListView(
         children: [
           const Divider(
-            height: 5,
+            height: 2,
             color: d_red,
           ),
           Stack(
@@ -145,7 +145,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: 150,
+      // height: 150,
       // padding: const EdgeInsets.fromLTRB(0, 28, 0, 0),
       decoration: const BoxDecoration(
         color: Colors.white,
@@ -159,7 +159,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
       ),
       child: Container(
         width: double.infinity,
-        height: 155,
+        // height: 155,
         decoration: const BoxDecoration(
           color: Colors.white,
           boxShadow: [
@@ -173,7 +173,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(12.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

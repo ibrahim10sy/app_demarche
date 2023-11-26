@@ -1,5 +1,5 @@
 import 'package:demarche_app/screen/accueil.dart';
-import 'package:demarche_app/screen/actualite.dart';
+import 'package:demarche_app/screen/actualite_screen.dart';
 import 'package:demarche_app/screen/forum.dart';
 import 'package:demarche_app/screen/localisation.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +19,7 @@ class _NavState extends State<Nav> {
   final List<Widget> _listTab = <Widget>[
     const Accueil(),
     const Localisation(),
-    const Actualite(),
+    const ActualiteScreen(),
     const Forums()
   ];
 

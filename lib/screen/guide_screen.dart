@@ -76,11 +76,11 @@ class _GuideScreenState extends State<GuideScreen> {
                             color: Color.fromRGBO(0, 0, 0, 0.38))
                       ],
                     ),
-                    child: ListView(
-                      // mainAxisAlignment: MainAxisAlignment.center,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Image.network("http://10.0.2.2/${guide.image!}"),
-                        const SizedBox(height: 20),
+                        Image.network("http://10.0.2.2/${guide.image}"),
+                        const SizedBox(height: 10),
                         Text(
                           textAlign: TextAlign.center,
                           guide.libelle,
