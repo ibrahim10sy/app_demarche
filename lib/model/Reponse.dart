@@ -10,14 +10,12 @@ class Reponse {
   String reponse;
   Forum forum;
   Utilisateur utilisateur;
-  Admin admin;
   
   Reponse({
     required this.idReponse,
     required this.reponse,
     required this.forum,
     required this.utilisateur,
-    required this.admin,
   });
 
   Reponse copyWith({
@@ -25,14 +23,12 @@ class Reponse {
     String? reponse,
     Forum? forum,
     Utilisateur? utilisateur,
-    Admin? admin,
   }) {
     return Reponse(
       idReponse: idReponse ?? this.idReponse,
       reponse: reponse ?? this.reponse,
       forum: forum ?? this.forum,
       utilisateur: utilisateur ?? this.utilisateur,
-      admin: admin ?? this.admin,
     );
   }
 
@@ -42,7 +38,6 @@ class Reponse {
       'reponse': reponse,
       'forum': forum.toMap(),
       'utilisateur': utilisateur.toMap(),
-      'admin': admin.toMap(),
     };
   }
 
@@ -52,7 +47,6 @@ class Reponse {
       reponse: map['reponse'] as String,
       forum: Forum.fromMap(map['forum'] as Map<String,dynamic>),
       utilisateur: Utilisateur.fromMap(map['utilisateur'] as Map<String,dynamic>),
-      admin: Admin.fromMap(map['admin'] as Map<String,dynamic>),
     );
   }
 
@@ -62,7 +56,7 @@ class Reponse {
 
   @override
   String toString() {
-    return 'Reponse(idReponse: $idReponse, reponse: $reponse, forum: $forum, utilisateur: $utilisateur, admin: $admin)';
+    return 'Reponse(idReponse: $idReponse, reponse: $reponse, forum: $forum, utilisateur: $utilisateur)';
   }
 
   @override
@@ -73,8 +67,7 @@ class Reponse {
       other.idReponse == idReponse &&
       other.reponse == reponse &&
       other.forum == forum &&
-      other.utilisateur == utilisateur &&
-      other.admin == admin;
+      other.utilisateur == utilisateur;
   }
 
   @override
@@ -82,7 +75,6 @@ class Reponse {
     return idReponse.hashCode ^
       reponse.hashCode ^
       forum.hashCode ^
-      utilisateur.hashCode ^
-      admin.hashCode;
+      utilisateur.hashCode;
   }
 }

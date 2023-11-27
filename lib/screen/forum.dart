@@ -290,92 +290,109 @@ class _ForumsState extends State<Forums> {
                   child: const Text('Créer un forum')),
             ),
           ),
-          Consumer<ForumService>(
-            builder: (context, forumService, child) {
-              return Expanded(
-                  child: FutureBuilder<List<Forum>>(
-                       future: forumService.getForumList(utilisateur.idUtilisateur!),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        }
+          Consumer<ForumService>(builder: (context, forumService, child) {
+            return Expanded(
+                child: FutureBuilder<List<Forum>>(
+                    future:
+                        forumService.getForumList(utilisateur.idUtilisateur!),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
 
-                        if (!snapshot.hasData) {
-                          return const Center(
-                            child: Text("Aucune donnée trouvé"),
-                          );
-                        } else {
-                          forumListe = snapshot.data!;
-                          return Column(
-                              children: forumListe.map((Forum forum) {
-                            return GestureDetector(
-                              onTap: (){
-                                 Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => Reponses(
-                                            forum: forum)));
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Expanded(
-                                  child: Container(
-                                    width: double.infinity,
-                                    height: 300,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      color: Colors.white,
-                                      boxShadow: const [
-                                        BoxShadow(
-                                          offset: Offset(0.0, 0.0),
-                                          blurRadius: 5.0,
-                                          color: Color.fromRGBO(0, 0, 0, 0.38),
-                                        )
-                                      ],
-                                    ),
-                                    child: Column(
-                                      children: [
-                                        ClipRRect(
-                                          borderRadius: BorderRadius.circular(10),
-                                          // width: double.infinity,
+                      if (!snapshot.hasData) {
+                        return const Center(
+                          child: Text("Aucune donnée trouvé"),
+                        );
+                      } else {
+                        forumListe = snapshot.data!;
+                        return Column(
+                            children: forumListe.map((Forum forum) {
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          Reponses(forum: forum)));
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Expanded(
+                                child: Container(
+                                  width: double.infinity,
+                                  height: 220,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Colors.white,
+                                    boxShadow: const [
+                                      BoxShadow(
+                                        offset: Offset(0.0, 0.0),
+                                        blurRadius: 5.0,
+                                        color: Color.fromRGBO(0, 0, 0, 0.38),
+                                      )
+                                    ],
+                                  ),
+                                  child: Stack(
+                                    children: [
+                                      // Image en haut du Container
+                                      Positioned(
+                                        top: 0,
+                                        left: 0,
+                                        right: 0,
+                                        bottom:
+                                            80, // Ajustez selon votre besoin
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
                                           child: Image.asset(
-                                                  'assets/images/orange2.png',
-
-                                                  // fit: BoxFit.cover,
-                                                  // width: double.infinity,
-                                                ),
-                                        ),
-                                         Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 15),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                forum.libelle,
-                                                style: const TextStyle(
-                                                    fontSize: 19,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.black),
-                                              ),
-
-                                            ],
+                                            "assets/images/mali.jpg",
+                                            fit: BoxFit.cover,
                                           ),
                                         ),
-                                      ],
-                                    ),
+                                      ),
+                                      // Contenu en bas du Container
+                                      Positioned(
+                                        bottom: 10,
+                                        // top: 10,
+                                        left: 0,
+                                        right: 0,
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Expanded(
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                  horizontal: 15,
+                                                  vertical: 10,
+                                                ),
+                                                child: Text(
+                                                  forum.libelle,
+                                                  style: const TextStyle(
+                                                    fontSize: 19,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.black,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ),
-                            );
-                          }).toList());
-                        }
-                      }));
-            }),
+                            ),
+                          );
+                        }).toList());
+                      }
+                    }));
+          }),
         ],
       ),
     );

@@ -10,6 +10,7 @@ class Forum {
   String libelle;
   String description;
   Utilisateur utilisateur;
+  
   Forum({
     required this.idForum,
     required this.libelle,
