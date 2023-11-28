@@ -14,7 +14,7 @@ const d_red = Color.fromRGBO(28, 36, 129, 10);
 class _LocalisationState extends State<Localisation> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       backgroundColor: Color.fromARGB(255, 245, 242, 242),
       appBar: CustomAppBar(),
       body: MapPage(),
