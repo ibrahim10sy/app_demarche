@@ -15,7 +15,7 @@ class GuideService {
 
   Future<List<Guide>> fetchGuide() async {
     final response = await http.get(Uri.parse('$baseUrl/read'));
-
+ 
     if (response.statusCode == 200) {
       List<dynamic> body = jsonDecode(utf8.decode(response.bodyBytes));
       guides = body.map((item) => Guide.fromMap(item)).toList();
