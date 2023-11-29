@@ -4,19 +4,18 @@ import 'dart:convert';
 import 'package:demarche_app/model/Admin.dart';
 
 class Actualite {
-  final int idActualite;
-  final String libelle;
-  final String? image;
-  final String description;
-  final String dateDebut;
-  final String dateFin;
-  final Admin admin;
-
+  int idActualite;
+  String libelle;
+  String image;
+  String description;
+  String dateDebut;
+  String dateFin;
+  Admin admin;
   
   Actualite({
     required this.idActualite,
     required this.libelle,
-    this.image,
+    required this.image,
     required this.description,
     required this.dateDebut,
     required this.dateFin,
@@ -61,7 +60,7 @@ class Actualite {
     return Actualite(
       idActualite: map['idActualite'] as int,
       libelle: map['libelle'] as String,
-      image: map['image'] != null ? map['image'] as String : null,
+      image: map['image'] as String,
       description: map['description'] as String,
       dateDebut: map['dateDebut'] as String,
       dateFin: map['dateFin'] as String,

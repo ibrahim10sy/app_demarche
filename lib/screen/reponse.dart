@@ -23,17 +23,19 @@ class _ReponsesState extends State<Reponses> {
   final reponseController = TextEditingController();
   late Utilisateur utilisateur;
   late Forum forums;
+
   late List<Reponse> reponseListyUser = [];
   late Future<List<Reponse>> _reponsesUser;
+
   late List<Reponse> reponseListAll = [];
   late Future<List<Reponse>> _reponseList;
   var reponseService = ReponseService();
 
-  Future<List<Reponse>> fetchForUser(int idUtilisateur,int idForum) {
+  Future<List<Reponse>> fetchForUser(int idUtilisateur, int idForum) {
     return reponseService.fetchReponseByIdUser(idUtilisateur, idForum);
   }
 
-  Future<List<Reponse>> fetchAll(int idUtilisateur,int idForum) {
+  Future<List<Reponse>> fetchAll(int idUtilisateur, int idForum) {
     return reponseService.fetchReponseAll(idUtilisateur, idForum);
   }
 
@@ -64,8 +66,86 @@ class _ReponsesState extends State<Reponses> {
         // Widget pour afficher le contenu principal du chat
         ListView(
           padding: const EdgeInsets.all(8.0),
-          children: const <Widget>[
-           
+          children: <Widget>[
+            Container(),
+            // Container pour les réponses des autres utilisateurs
+            Container(
+              child: Consumer<ReponseService>(
+                builder: (context, responseService, child) {
+                  return FutureBuilder(
+                    future: responseService.fetchReponseByIdUser(
+                      utilisateur.idUtilisateur!,
+                      forums.idForum,
+                    ),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+
+                      if (!snapshot.hasData) {
+                        return Center(
+                          child: Text("Aucune réponse trouvée"),
+                        );
+                      } else {
+                        reponseListyUser = snapshot.data!;
+                        return Column(
+                          children: reponseListyUser.map((Reponse reponse) {
+                            return Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 8.0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.end, //alignement à droite
+                                children: [
+                                  Expanded(
+                                    child: Container(
+                                      width: 100,
+                                      padding: const EdgeInsets.all(8),
+                                      decoration: BoxDecoration(
+                                        color: Colors.greenAccent,
+                                        borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(10),
+                                          bottomLeft: Radius.circular(10),
+                                          bottomRight: Radius.circular(30),
+                                          topRight: Radius.circular(30),
+                                        ),
+                                      ),
+                                      child: Text(
+                                        reponse.reponse,
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(width: 8),
+                                  CircleAvatar(
+                                    radius: 28,
+                                    backgroundColor: d_red,
+                                    child: Text(
+                                      "${reponse.utilisateur.prenom.substring(0, 1).toUpperCase()}${reponse.utilisateur.nom.substring(0, 1).toUpperCase()}",
+                                      style: const TextStyle(
+                                        fontSize: 25,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                        letterSpacing: 2,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }).toList(),
+                        );
+                      }
+                    },
+                  );
+                },
+              ),
+            ),
           ],
         ),
 

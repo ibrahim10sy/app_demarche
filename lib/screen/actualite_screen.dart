@@ -3,6 +3,7 @@ import 'package:demarche_app/screen/actualite_detail.dart';
 import 'package:demarche_app/screen/home.dart';
 import 'package:demarche_app/service/actualiteService.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ActualiteScreen extends StatefulWidget {
   const ActualiteScreen({super.key});
@@ -24,9 +25,9 @@ class _ActualiteScreenState extends State<ActualiteScreen> {
 
   @override
   void initState() {
-    super.initState();
     _actualite = getActualiteListe();
-    print(_actualite.toString());
+    _actualite.printInfo();
+    super.initState();
   }
 
   @override
@@ -45,15 +46,22 @@ class _ActualiteScreenState extends State<ActualiteScreen> {
                       child: CircularProgressIndicator(),
                     );
                   }
-                  if (snapshot.hasError || snapshot.data == null) {
-                    return const Center(
-                      child: Text("Aucune donnée trouvée"),
+                  if (snapshot.hasError) {
+                    return Center(
+                      child: Text(snapshot.error.toString()),
                     );
                   }
+
+                  if (!snapshot.hasData) {
+                    return Center(
+                      child: Text("Aucune donnée trouvé"),
+                    );
+                  }
+
                   actualiteListe = snapshot.data!;
 
                   return Column(
-                      children: actualiteListe.map((Actualite actu) {
+                      children: actualiteListe.map((Actualite actualite) {
                     return Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: Expanded(
@@ -78,11 +86,11 @@ class _ActualiteScreenState extends State<ActualiteScreen> {
                                 top: 0,
                                 left: 0,
                                 right: 0,
-                                bottom: 80, // Ajustez selon votre besoin
+                                bottom: 80, 
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10),
                                   child: Image.network(
-                                    "http://10.0.2.2/${actu.image}",
+                                   "http://10.0.2.2/${actualite.image}",
                                     fit: BoxFit.cover,
                                   ),
                                 ),
@@ -103,7 +111,7 @@ class _ActualiteScreenState extends State<ActualiteScreen> {
                                           vertical: 10,
                                         ),
                                         child: Text(
-                                          actu.libelle,
+                                          actualite.libelle,
                                           style: const TextStyle(
                                             fontSize: 19,
                                             fontWeight: FontWeight.bold,
@@ -128,7 +136,7 @@ class _ActualiteScreenState extends State<ActualiteScreen> {
                                                 MaterialPageRoute(
                                                   builder: (context) =>
                                                       ActualiteDetail(
-                                                          actualites: actu),
+                                                          actualites: actualite),
                                                 ),
                                               );
                                             },
