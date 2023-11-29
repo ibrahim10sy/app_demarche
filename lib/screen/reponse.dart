@@ -183,7 +183,7 @@ class _ReponsesState extends State<Reponses> {
                           utilisateur: utilisateur)
                       .then((value) {
                     print('Message envoyé: $message');
-                    // Efface le champ de texte après l'envoi
+                    
                     reponseController.clear();
                   }).catchError((onError) {
                     print('Une erreur est survenue lors de l\'envoie $onError');
