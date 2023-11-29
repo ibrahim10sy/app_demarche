@@ -26,15 +26,15 @@ class _ForumsState extends State<Forums> {
   late Future<List<Forum>> _forum;
   var forumService = ForumService();
 
-  Future<List<Forum>> fetchData(int id) async {
-    return forumService.getForumList(id);
+  Future<List<Forum>> fetchData() async {
+    return forumService.getForumList();
   }
 
   @override
   void initState() {
     utilisateur =
         Provider.of<UtilisateurProvider>(context, listen: false).utilisateur!;
-    _forum = fetchData(utilisateur.idUtilisateur!);
+    _forum = fetchData();
     super.initState();
   }
 
@@ -294,7 +294,7 @@ class _ForumsState extends State<Forums> {
             return Expanded(
                 child: FutureBuilder<List<Forum>>(
                     future:
-                        forumService.getForumList(utilisateur.idUtilisateur!),
+                        forumService.getForumList(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const Center(

@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 class ReponseService extends ChangeNotifier {
-  final baseUrl = 'http://10.0.2.2/Reponse';
+  final baseUrl = 'http://10.0.2.2:8080/Reponse';
 
   List<Reponse> reponseByUser = [];
   List<Reponse> reponseAll = [];
@@ -24,22 +24,24 @@ class ReponseService extends ChangeNotifier {
       'utilisateur': utilisateur.toMap()
     });
 
-    final response = await http.post(Uri.parse('$baseUrl/createForUtilisateur'),
-        headers: {'Content-Type': 'application/json'}, body: rep);
+    final response = await http.post(
+        Uri.parse('http://10.0.2.2:8080/Reponse/createForUtilisateur'),
+        headers: {'Content-Type': 'application/json'},
+        body: rep);
 
     if (response.statusCode == 200) {
       print(response.body);
       applyChange();
     } else {
       debugPrint(response.body);
-      throw Exception('Impossible de créer un forum ${response.statusCode}');
+      throw Exception('Impossible de créer une reponse ${response.statusCode}');
     }
-    throw Exception('Impossible de créer un forum');
+    throw Exception('Impossible de créer une reponse');
   }
 
-  Future<List<Reponse>> fetchReponseByIdUser(int idUtilisateur) async {
+  Future<List<Reponse>> fetchReponseByIdUser(int idUtilisateur,int idForum) async {
     final response =
-        await http.get(Uri.parse('$baseUrl/readForUtilisateur/$idUtilisateur'));
+        await http.get(Uri.parse('$baseUrl/readForUtilisateur/$idUtilisateur/$idForum'));
 
     if (response.statusCode == 200) {
       List<dynamic> body = jsonDecode(utf8.decode(response.bodyBytes));
@@ -49,14 +51,13 @@ class ReponseService extends ChangeNotifier {
       return reponseByUser;
     } else {
       reponseByUser = [];
-       print('Échec de la requête avec le code d\'état: ${response.statusCode}');
+      print('Échec de la requête avec le code d\'état: ${response.statusCode}');
       throw Exception(jsonDecode(utf8.decode(response.bodyBytes))["message"]);
     }
-    }
+  }
 
-  Future<List<Reponse>> fetchReponseAll() async {
-    final response =
-        await http.get(Uri.parse('$baseUrl/read'));
+  Future<List<Reponse>> fetchReponseAll(int idUtilisateur,int idForum) async {
+    final response = await http.get(Uri.parse('$baseUrl/readForOtherUtilisateurs/$idUtilisateur/$idForum'));
 
     if (response.statusCode == 200) {
       List<dynamic> body = jsonDecode(utf8.decode(response.bodyBytes));
@@ -70,7 +71,6 @@ class ReponseService extends ChangeNotifier {
       throw Exception(jsonDecode(utf8.decode(response.bodyBytes))["message"]);
     }
   }
- 
 
   applyChange() {
     notifyListeners();

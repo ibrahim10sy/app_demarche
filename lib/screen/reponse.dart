@@ -1,4 +1,5 @@
 import 'package:demarche_app/model/Forum.dart';
+import 'package:demarche_app/model/Reponse.dart';
 import 'package:demarche_app/model/Utilisateur.dart';
 import 'package:demarche_app/provider/utilisateurProvider.dart';
 import 'package:demarche_app/screen/forum.dart';
@@ -22,14 +23,29 @@ class _ReponsesState extends State<Reponses> {
   final reponseController = TextEditingController();
   late Utilisateur utilisateur;
   late Forum forums;
+  late List<Reponse> reponseListyUser = [];
+  late Future<List<Reponse>> _reponsesUser;
+  late List<Reponse> reponseListAll = [];
+  late Future<List<Reponse>> _reponseList;
+  var reponseService = ReponseService();
+
+  Future<List<Reponse>> fetchForUser(int idUtilisateur,int idForum) {
+    return reponseService.fetchReponseByIdUser(idUtilisateur, idForum);
+  }
+
+  Future<List<Reponse>> fetchAll(int idUtilisateur,int idForum) {
+    return reponseService.fetchReponseAll(idUtilisateur, idForum);
+  }
 
   @override
   void initState() {
     utilisateur =
         Provider.of<UtilisateurProvider>(context, listen: false).utilisateur!;
-    utilisateur.printInfo();
     forums = widget.forum;
-    forums.printInfo();
+    _reponsesUser = fetchForUser(utilisateur.idUtilisateur!, forums.idForum);
+    _reponsesUser.printInfo();
+    _reponseList = fetchAll(utilisateur.idUtilisateur!, forums.idForum);
+    _reponseList.printInfo();
     super.initState();
   }
 
@@ -38,18 +54,18 @@ class _ReponsesState extends State<Reponses> {
     return Scaffold(
       appBar: const CustomAppBar(),
       body: Stack(children: [
-        Center(
-          child: Text(
-            'Forum crée ${forums.utilisateur.nom} ${forums.utilisateur.prenom}',
-            style: const TextStyle(fontSize: 18),
-          ),
-        ),
+        // Center(
+        //   child: Text(
+        //     'Forum crée ${forums.utilisateur.nom} ${forums.utilisateur.prenom}',
+        //     style: const TextStyle(fontSize: 18),
+        //   ),
+        // ),
 
         // Widget pour afficher le contenu principal du chat
         ListView(
           padding: const EdgeInsets.all(8.0),
           children: const <Widget>[
-            // ... Autres messages du chat
+           
           ],
         ),
 
@@ -81,13 +97,16 @@ class _ReponsesState extends State<Reponses> {
                   String message = reponseController.text;
                   await Provider.of<ReponseService>(context, listen: false)
                       .creerReponseUser(
-                          context: context, reponse: message, forum: forums, utilisateur: utilisateur)
+                          context: context,
+                          reponse: message,
+                          forum: forums,
+                          utilisateur: utilisateur)
                       .then((value) {
                     print('Message envoyé: $message');
                     // Efface le champ de texte après l'envoi
                     reponseController.clear();
                   }).catchError((onError) {
-                    print('Une erreur est survenue $onError');
+                    print('Une erreur est survenue lors de l\'envoie $onError');
                   });
                 },
               ),
