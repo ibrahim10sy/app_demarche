@@ -1,7 +1,9 @@
+import 'package:demarche_app/provider/reponseProvider.dart';
 import 'package:demarche_app/provider/utilisateurProvider.dart';
 import 'package:demarche_app/provider/forumProvider.dart';
 import 'package:demarche_app/screen/home_splash.dart';
 import 'package:demarche_app/service/forumService.dart';
+import 'package:demarche_app/service/reponseService.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -12,6 +14,8 @@ void main() {
      ChangeNotifierProvider(create: (context) => UtilisateurProvider()),
     ChangeNotifierProvider(create: (context) => ForumProvider()),
     ChangeNotifierProvider(create: (context) => ForumService()),
+    ChangeNotifierProvider(create: (context) => ReponseProvider()),
+    ChangeNotifierProvider(create: (context) => ReponseService()),
   ], child: const MyApp()));
 }
 

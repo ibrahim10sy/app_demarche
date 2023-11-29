@@ -348,7 +348,7 @@ class _ForumsState extends State<Forums> {
                                           borderRadius:
                                               BorderRadius.circular(10),
                                           child: Image.asset(
-                                            "assets/images/mali.jpg",
+                                            "assets/images/forum.jpg",
                                             fit: BoxFit.cover,
                                           ),
                                         ),
@@ -370,13 +370,29 @@ class _ForumsState extends State<Forums> {
                                                   horizontal: 15,
                                                   vertical: 10,
                                                 ),
-                                                child: Text(
-                                                  forum.libelle,
-                                                  style: const TextStyle(
-                                                    fontSize: 19,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.black,
-                                                  ),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Text(
+                                                      forum.libelle,
+                                                      style: const TextStyle(
+                                                        fontSize: 22,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: Colors.black,
+                                                      ),
+                                                    ),
+                                                    IconButton(
+                                                        onPressed: () {},
+                                                        icon: const Icon(
+                                                          Icons
+                                                              .restore_from_trash,
+                                                          size: 30,
+                                                          color: Colors.red,
+                                                        ))
+                                                  ],
                                                 ),
                                               ),
                                             ),

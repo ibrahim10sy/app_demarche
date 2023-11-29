@@ -66,14 +66,18 @@ class _MapPageState extends State<MapPage> {
 
   @override
   void initState() {
-    // getLocationUpdates();
+     getLocationUpdates();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: GoogleMap(
+      body:_currentP == null
+          ? const Center(
+              child: Text("Chargement..."),
+            )
+          :  GoogleMap(
         onMapCreated: _onMapCreated,
         initialCameraPosition: CameraPosition(
           target: _pGooglePlex,
@@ -104,45 +108,45 @@ class _MapPageState extends State<MapPage> {
 //                 ...markers,
 //               ]),
 //             ),
-  // Future<void> _cameraToPosition(LatLng pos) async {
-  //   final GoogleMapController controller = await _mapController.future;
-  //   CameraPosition _newCameraPosition = CameraPosition(
-  //     target: pos,
-  //     zoom: 13,
-  //   );
+  Future<void> _cameraToPosition(LatLng pos) async {
+    final GoogleMapController controller = await _mapController.future;
+    CameraPosition _newCameraPosition = CameraPosition(
+      target: pos,
+      zoom: 13,
+    );
 
-  //   await controller
-  //       .animateCamera(CameraUpdate.newCameraPosition(_newCameraPosition));
-  // }
+    await controller
+        .animateCamera(CameraUpdate.newCameraPosition(_newCameraPosition));
+  }
 
-  // Future<void> getLocationUpdates() async {
-  //   bool serviceEnabled;
-  //   PermissionStatus permissionGaranted;
+  Future<void> getLocationUpdates() async {
+    bool serviceEnabled;
+    PermissionStatus permissionGaranted;
 
-  //   serviceEnabled = await _locationController.serviceEnabled();
-  //   if (serviceEnabled) {
-  //     serviceEnabled = await _locationController.serviceEnabled();
-  //   } else {
-  //     return;
-  //   }
-  //   permissionGaranted = await _locationController.hasPermission();
-  //   if (permissionGaranted == PermissionStatus.denied) {
-  //     permissionGaranted = await _locationController.requestPermission();
-  //     if (permissionGaranted != PermissionStatus.granted) {
-  //       return;
-  //     }
-  //   }
+    serviceEnabled = await _locationController.serviceEnabled();
+    if (serviceEnabled) {
+      serviceEnabled = await _locationController.serviceEnabled();
+    } else {
+      return;
+    }
+    permissionGaranted = await _locationController.hasPermission();
+    if (permissionGaranted == PermissionStatus.denied) {
+      permissionGaranted = await _locationController.requestPermission();
+      if (permissionGaranted != PermissionStatus.granted) {
+        return;
+      }
+    }
 
-  //   _locationController.onLocationChanged
-  //       .listen((LocationData currentLocation) {
-  //     if (currentLocation.latitude != null &&
-  //         currentLocation.longitude != null) {
-  //       setState(() {
-  //         _currentP =
-  //             LatLng(currentLocation.latitude!, currentLocation.longitude!);
-  //         _cameraToPosition(_currentP!);
-  //       });
-  //     }
-  //   });
-  // }
+    _locationController.onLocationChanged
+        .listen((LocationData currentLocation) {
+      if (currentLocation.latitude != null &&
+          currentLocation.longitude != null) {
+        setState(() {
+          _currentP =
+              LatLng(currentLocation.latitude!, currentLocation.longitude!);
+          _cameraToPosition(_currentP!);
+        });
+      }
+    });
+  }
 }
