@@ -69,82 +69,80 @@ class _ReponsesState extends State<Reponses> {
           children: <Widget>[
             Container(),
             // Container pour les réponses des autres utilisateurs
-            Container(
-              child: Consumer<ReponseService>(
-                builder: (context, responseService, child) {
-                  return FutureBuilder(
-                    future: responseService.fetchReponseByIdUser(
-                      utilisateur.idUtilisateur!,
-                      forums.idForum,
-                    ),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      }
-
-                      if (!snapshot.hasData) {
-                        return Center(
-                          child: Text("Aucune réponse trouvée"),
-                        );
-                      } else {
-                        reponseListyUser = snapshot.data!;
-                        return Column(
-                          children: reponseListyUser.map((Reponse reponse) {
-                            return Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 8.0),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.end, //alignement à droite
-                                children: [
-                                  Expanded(
-                                    child: Container(
-                                      width: 100,
-                                      padding: const EdgeInsets.all(8),
-                                      decoration: BoxDecoration(
-                                        color: Colors.greenAccent,
-                                        borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(10),
-                                          bottomLeft: Radius.circular(10),
-                                          bottomRight: Radius.circular(30),
-                                          topRight: Radius.circular(30),
-                                        ),
-                                      ),
-                                      child: Text(
-                                        reponse.reponse,
-                                        style: TextStyle(
-                                            fontSize: 20,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold),
+            Consumer<ReponseService>(
+              builder: (context, responseService, child) {
+                return FutureBuilder(
+                  future: responseService.fetchReponseByIdUser(
+                    utilisateur.idUtilisateur!,
+                    forums.idForum,
+                  ),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+            
+                    if (!snapshot.hasData) {
+                      return Center(
+                        child: Text("Aucune réponse trouvée"),
+                      );
+                    } else {
+                      reponseListyUser = snapshot.data!;
+                      return Column(
+                        children: reponseListyUser.map((Reponse reponse) {
+                          return Padding(
+                            padding:
+                                const EdgeInsets.symmetric(vertical: 8.0),
+                            child: Row(
+                              mainAxisAlignment:
+                                  MainAxisAlignment.end, //alignement à droite
+                              children: [
+                                Expanded(
+                                  child: Container(
+                                    width: 100,
+                                    padding: const EdgeInsets.all(8),
+                                    decoration: BoxDecoration(
+                                      color: Colors.greenAccent,
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(10),
+                                        bottomLeft: Radius.circular(10),
+                                        bottomRight: Radius.circular(30),
+                                        topRight: Radius.circular(30),
                                       ),
                                     ),
-                                  ),
-                                  SizedBox(width: 8),
-                                  CircleAvatar(
-                                    radius: 28,
-                                    backgroundColor: d_red,
                                     child: Text(
-                                      "${reponse.utilisateur.prenom.substring(0, 1).toUpperCase()}${reponse.utilisateur.nom.substring(0, 1).toUpperCase()}",
-                                      style: const TextStyle(
-                                        fontSize: 25,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
-                                        letterSpacing: 2,
-                                      ),
+                                      reponse.reponse,
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold),
                                     ),
                                   ),
-                                ],
-                              ),
-                            );
-                          }).toList(),
-                        );
-                      }
-                    },
-                  );
-                },
-              ),
+                                ),
+                                SizedBox(width: 8),
+                                CircleAvatar(
+                                  radius: 28,
+                                  backgroundColor: d_red,
+                                  child: Text(
+                                    "${reponse.utilisateur.prenom.substring(0, 1).toUpperCase()}${reponse.utilisateur.nom.substring(0, 1).toUpperCase()}",
+                                    style: const TextStyle(
+                                      fontSize: 25,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                      letterSpacing: 2,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        }).toList(),
+                      );
+                    }
+                  },
+                );
+              },
             ),
           ],
         ),

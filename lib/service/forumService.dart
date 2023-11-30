@@ -36,7 +36,8 @@ class ForumService extends ChangeNotifier {
   }
 
   Future<List<Forum>> getForumList() async {
-    final response = await http.get(Uri.parse(baseUrlUserList));
+    final response = 
+          await http.get(Uri.parse(baseUrlUserList));
 
     if (response.statusCode == 200) {
       List<dynamic> body = jsonDecode(utf8.decode(response.bodyBytes));

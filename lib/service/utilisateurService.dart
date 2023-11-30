@@ -9,6 +9,7 @@ import 'package:demarche_app/provider/utilisateurProvider.dart';
 
 class UtilisateurService extends ChangeNotifier {
   static const String baseUrl = 'http://10.0.2.2:8080/utilisateur/create';
+  static const String apiUrl = 'http://10.0.2.2:8080/utilisateur/update';
 
   static Future<Utilisateur> creerCompte({
     required String nom,
@@ -20,60 +21,6 @@ class UtilisateurService extends ChangeNotifier {
     try {
       var requete = http.MultipartRequest(
           'POST', Uri.parse('http://10.0.2.2:8080/utilisateur/create'));
-
-      // Ajouter le fichier image à la requête s'il est fourni
-      if (image != null) {
-        requete.files.add(http.MultipartFile(
-          'images',
-          image.readAsBytes().asStream(),
-          image.lengthSync(),
-          filename: basename(image.path),
-        ));
-      }
-
-      
-      // requete.headers['Content-Type'] = 'application/json';
-
-      // Encoder les données de l'utilisateur en JSON et les ajouter aux champs de la requête
-      requete.fields['utilisateur'] = jsonEncode({
-        'nom': nom,
-        'prenom': prenom,
-        'email': email,
-        'motDePasse': motDePasse,
-        'image': "",
-      });
-
-      var response = await requete.send();
-      var responsed = await http.Response.fromStream(response);
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        final donneesReponse =
-            json.decode(responsed.body);
-            // debugPrint(responsed.body);
-
-        return Utilisateur.fromMap(donneesReponse);
-      } else {
-       
-        throw Exception(
-            'Échec de la requête avec le code d\'état : ${responsed.statusCode}');
-      }
-    } catch (e) {
-     
-      throw Exception(
-          'Une erreur s\'est produite lors de l\'ajout de l\'utilisateur : $e');
-    }
-  }
-////////update
-   Future<Utilisateur> updateUser({
-    required int idUtilisateur,
-    required String nom,
-    required String prenom,
-    required String email,
-    required String motDePasse,
-    File? image,
-  }) async {
-    try {
-      var requete = http.MultipartRequest(
-          'PUT', Uri.parse('http://10.0.2.2:8080/utilisateur/update/$idUtilisateur'));
 
       // Ajouter le fichier image à la requête s'il est fourni
       if (image != null) {
@@ -109,9 +56,65 @@ class UtilisateurService extends ChangeNotifier {
       }
     } catch (e) {
       throw Exception(
+          'Une erreur s\'est produite lors de l\'ajout de l\'utilisateur : $e');
+    }
+  }
+
+////////update
+  Future<Utilisateur> updateUser({
+    required int idUtilisateur,
+    required String nom,
+    required String prenom,
+    required String email,
+    required String motDePasse,
+    File? image,
+  }) async {
+    try {
+      var requete =
+          http.MultipartRequest('PUT', Uri.parse('$apiUrl/$idUtilisateur'));
+
+      // Ajouter le fichier image à la requête s'il est fourni
+      if (image != null) {
+        requete.files.add(http.MultipartFile(
+          'images',
+          image.readAsBytes().asStream(),
+          image.lengthSync(),
+          filename: basename(image.path),
+        ));
+      }
+
+      // requete.headers['Content-Type'] = 'application/json';
+
+      // Encoder les données de l'utilisateur en JSON et les ajouter aux champs de la requête
+      requete.fields['utilisateur'] = jsonEncode({
+        'nom': nom,
+        'prenom': prenom,
+        'email': email,
+        'motDePasse': motDePasse,
+        'image': "",
+      });
+
+      var response = await requete.send();
+      var responsed = await http.Response.fromStream(response);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final donneesReponse = json.decode(responsed.body);
+        // debugPrint(responsed.body);
+
+        return Utilisateur.fromJson(donneesReponse);
+      } else {
+        throw Exception(
+            'Échec de la requête avec le code d\'état : ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception(
           'Une erreur s\'est produite lors de la modification de l\'utilisateur : $e');
     }
   }
+
+  void applyChange() {
+    notifyListeners();
+  }
+
   // Méthode pour la connexion
   static Future<Utilisateur> connexion({
     required String email,
@@ -121,7 +124,6 @@ class UtilisateurService extends ChangeNotifier {
       var request = http.MultipartRequest(
         'POST',
         Uri.parse('http://10.0.2.2:8080/utilisateur/connexion'),
-        
       );
 
       request.headers['Content-Type'] = 'application/json';
@@ -130,7 +132,7 @@ class UtilisateurService extends ChangeNotifier {
         'email': email,
         'motDePasse': motDePasse,
       });
-   print(request.toString());
+      print(request.toString());
       var response = await request.send();
       print(response.toString());
       if (response.statusCode == 200 || response.statusCode == 201) {

@@ -141,35 +141,35 @@ class _ForumsState extends State<Forums> {
                                               String description =
                                                   descController.text;
 
-                                              if (libelle.isEmpty ||
-                                                  description.isEmpty) {
-                                                const String errorMessage =
-                                                    "Champs titre doit être renseigner";
-                                                showDialog(
-                                                    context: context,
-                                                    builder:
-                                                        (BuildContext context) {
-                                                      return AlertDialog(
-                                                        title: const Center(
-                                                            child:
-                                                                Text('Erreur')),
-                                                        content: const Text(
-                                                            errorMessage),
-                                                        actions: <Widget>[
-                                                          TextButton(
-                                                            onPressed: () {
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .pop();
-                                                            },
-                                                            child: const Text(
-                                                                'Ok'),
-                                                          )
-                                                        ],
-                                                      );
-                                                    });
-                                                return;
-                                              }
+                                              // if (libelle.isEmpty ||
+                                              //     description.isEmpty) {
+                                              //   const String errorMessage =
+                                              //       "Champs titre doit être renseigner";
+                                              //   showDialog(
+                                              //       context: context,
+                                              //       builder:
+                                              //           (BuildContext context) {
+                                              //         return AlertDialog(
+                                              //           title: const Center(
+                                              //               child:
+                                              //                   Text('Erreur')),
+                                              //           content: const Text(
+                                              //               errorMessage),
+                                              //           actions: <Widget>[
+                                              //             TextButton(
+                                              //               onPressed: () {
+                                              //                 Navigator.of(
+                                              //                         context)
+                                              //                     .pop();
+                                              //               },
+                                              //               child: const Text(
+                                              //                   'Ok'),
+                                              //             )
+                                              //           ],
+                                              //         );
+                                              //       });
+                                              //   return;
+                                              // }
                                               await Provider.of<ForumService>(
                                                       context,
                                                       listen: false)
@@ -179,21 +179,16 @@ class _ForumsState extends State<Forums> {
                                                       description: description,
                                                       utilisateur: utilisateur)
                                                   .then((value) {
+                                                     Navigator.of(context).pop();
                                                 libelleController.clear();
                                                 descController.clear();
-                                                // await ForumService().creerForumByUser(
-                                                //         context: context,
-                                                //         libelle: libelle,
-                                                //         description: description,
-                                                //         utilisateur: utilisateur)
-                                                //     .then((value) {
                                                 libelleController.clear();
                                                 descController.clear();
-                                                Navigator.of(context).pop();
+                                               
                                               }).catchError((onError) {
                                                 final String errorMessage =
                                                     onError.toString();
-                                                // ignore: use_build_context_synchronously
+                                              
                                                 showDialog(
                                                     context: context,
                                                     builder:
@@ -293,15 +288,14 @@ class _ForumsState extends State<Forums> {
           Consumer<ForumService>(
             builder: (context, forumService, child) {
             return FutureBuilder(
-                future:
-                    forumService.getForumList(),
+                future: forumService.getForumList(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(
                       child: CircularProgressIndicator(),
                     );
                   }
-            
+
                   if (!snapshot.hasData) {
                     return const Center(
                       child: Text("Aucune donnée trouvé"),
@@ -342,11 +336,9 @@ class _ForumsState extends State<Forums> {
                                     top: 0,
                                     left: 0,
                                     right: 0,
-                                    bottom:
-                                        80, // Ajustez selon votre besoin
+                                    bottom: 80, // Ajustez selon votre besoin
                                     child: ClipRRect(
-                                      borderRadius:
-                                          BorderRadius.circular(10),
+                                      borderRadius: BorderRadius.circular(10),
                                       child: Image.asset(
                                         "assets/images/forum.jpg",
                                         fit: BoxFit.cover,
@@ -365,8 +357,7 @@ class _ForumsState extends State<Forums> {
                                       children: [
                                         Expanded(
                                           child: Padding(
-                                            padding:
-                                                const EdgeInsets.symmetric(
+                                            padding: const EdgeInsets.symmetric(
                                               horizontal: 15,
                                               vertical: 10,
                                             ),
@@ -379,16 +370,14 @@ class _ForumsState extends State<Forums> {
                                                   forum.libelle,
                                                   style: const TextStyle(
                                                     fontSize: 22,
-                                                    fontWeight:
-                                                        FontWeight.bold,
+                                                    fontWeight: FontWeight.bold,
                                                     color: Colors.black,
                                                   ),
                                                 ),
                                                 IconButton(
                                                     onPressed: () {},
                                                     icon: const Icon(
-                                                      Icons
-                                                          .restore_from_trash,
+                                                      Icons.restore_from_trash,
                                                       size: 30,
                                                       color: Colors.red,
                                                     ))
