@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:demarche_app/model/Utilisateur.dart';
 import 'package:demarche_app/provider/utilisateurProvider.dart';
 import 'package:demarche_app/screen/guide_screen.dart';
+import 'package:demarche_app/screen/profil.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -180,37 +181,45 @@ class _CustomAppBarState extends State<CustomAppBar> {
                   Consumer<UtilisateurProvider>(
                       builder: (context, utilisateurprovider, child) {
                     final user = utilisateurprovider.utilisateur;
-                    return Row(
-                      children: [
-                        user?.image == null || user?.image?.isEmpty == true
-                            ? CircleAvatar(
-                                backgroundColor: d_red,
-                                radius: 28,
-                                child: Text(
-                                  "${user!.prenom.substring(0, 1).toUpperCase()}${user.nom.substring(0, 1).toUpperCase()}",
-                                  style: const TextStyle(
-                                      fontSize: 25,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                      letterSpacing: 2),
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const Profil()));
+                      },
+                      child: Row(
+                        children: [
+                          user?.image == null || user?.image?.isEmpty == true
+                              ? CircleAvatar(
+                                  backgroundColor: d_red,
+                                  radius: 28,
+                                  child: Text(
+                                    "${user!.prenom.substring(0, 1).toUpperCase()}${user.nom.substring(0, 1).toUpperCase()}",
+                                    style: const TextStyle(
+                                        fontSize: 25,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                        letterSpacing: 2),
+                                  ),
+                                )
+                              : CircleAvatar(
+                                  backgroundImage: NetworkImage(user!.image!),
+                                  radius: 28,
                                 ),
-                              )
-                            : CircleAvatar(
-                                backgroundImage: NetworkImage(user!.image!),
-                                radius: 28,
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
+                            child: Text(
+                              "${user.prenom.toUpperCase()} ${user.nom.toUpperCase()} ",
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
                               ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
-                          child: Text(
-                            "${user.prenom.toUpperCase()} ${user.nom.toUpperCase()} ",
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
                             ),
-                          ),
-                        )
-                      ],
+                          )
+                        ],
+                      ),
                     );
                   }),
                   const IconButton(

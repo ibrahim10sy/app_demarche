@@ -290,124 +290,124 @@ class _ForumsState extends State<Forums> {
                   child: const Text('Créer un forum')),
             ),
           ),
-          Consumer<ForumService>(builder: (context, forumService, child) {
-            return Expanded(
-                child: FutureBuilder<List<Forum>>(
-                    future:
-                        forumService.getForumList(),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      }
-
-                      if (!snapshot.hasData) {
-                        return const Center(
-                          child: Text("Aucune donnée trouvé"),
-                        );
-                      } else {
-                        forumListe = snapshot.data!;
-                        return Column(
-                            children: forumListe.map((Forum forum) {
-                          return GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          Reponses(forum: forum)));
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Expanded(
-                                child: Container(
-                                  width: double.infinity,
-                                  height: 220,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: Colors.white,
-                                    boxShadow: const [
-                                      BoxShadow(
-                                        offset: Offset(0.0, 0.0),
-                                        blurRadius: 5.0,
-                                        color: Color.fromRGBO(0, 0, 0, 0.38),
-                                      )
-                                    ],
+          Consumer<ForumService>(
+            builder: (context, forumService, child) {
+            return FutureBuilder(
+                future:
+                    forumService.getForumList(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+            
+                  if (!snapshot.hasData) {
+                    return const Center(
+                      child: Text("Aucune donnée trouvé"),
+                    );
+                  } else {
+                    forumListe = snapshot.data!;
+                    return Column(
+                        children: forumListe.map((Forum forum) {
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      Reponses(forum: forum)));
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Expanded(
+                            child: Container(
+                              width: double.infinity,
+                              height: 220,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.white,
+                                boxShadow: const [
+                                  BoxShadow(
+                                    offset: Offset(0.0, 0.0),
+                                    blurRadius: 5.0,
+                                    color: Color.fromRGBO(0, 0, 0, 0.38),
+                                  )
+                                ],
+                              ),
+                              child: Stack(
+                                children: [
+                                  // Image en haut du Container
+                                  Positioned(
+                                    top: 0,
+                                    left: 0,
+                                    right: 0,
+                                    bottom:
+                                        80, // Ajustez selon votre besoin
+                                    child: ClipRRect(
+                                      borderRadius:
+                                          BorderRadius.circular(10),
+                                      child: Image.asset(
+                                        "assets/images/forum.jpg",
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
                                   ),
-                                  child: Stack(
-                                    children: [
-                                      // Image en haut du Container
-                                      Positioned(
-                                        top: 0,
-                                        left: 0,
-                                        right: 0,
-                                        bottom:
-                                            80, // Ajustez selon votre besoin
-                                        child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          child: Image.asset(
-                                            "assets/images/forum.jpg",
-                                            fit: BoxFit.cover,
+                                  // Contenu en bas du Container
+                                  Positioned(
+                                    bottom: 10,
+                                    // top: 10,
+                                    left: 0,
+                                    right: 0,
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Expanded(
+                                          child: Padding(
+                                            padding:
+                                                const EdgeInsets.symmetric(
+                                              horizontal: 15,
+                                              vertical: 10,
+                                            ),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(
+                                                  forum.libelle,
+                                                  style: const TextStyle(
+                                                    fontSize: 22,
+                                                    fontWeight:
+                                                        FontWeight.bold,
+                                                    color: Colors.black,
+                                                  ),
+                                                ),
+                                                IconButton(
+                                                    onPressed: () {},
+                                                    icon: const Icon(
+                                                      Icons
+                                                          .restore_from_trash,
+                                                      size: 30,
+                                                      color: Colors.red,
+                                                    ))
+                                              ],
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      // Contenu en bas du Container
-                                      Positioned(
-                                        bottom: 10,
-                                        // top: 10,
-                                        left: 0,
-                                        right: 0,
-                                        child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Expanded(
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                  horizontal: 15,
-                                                  vertical: 10,
-                                                ),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Text(
-                                                      forum.libelle,
-                                                      style: const TextStyle(
-                                                        fontSize: 22,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        color: Colors.black,
-                                                      ),
-                                                    ),
-                                                    IconButton(
-                                                        onPressed: () {},
-                                                        icon: const Icon(
-                                                          Icons
-                                                              .restore_from_trash,
-                                                          size: 30,
-                                                          color: Colors.red,
-                                                        ))
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
-                                ),
+                                ],
                               ),
                             ),
-                          );
-                        }).toList());
-                      }
-                    }));
+                          ),
+                        ),
+                      );
+                    }).toList());
+                  }
+                });
           }),
         ],
       ),

@@ -29,7 +29,6 @@ class ForumService extends ChangeNotifier {
       print("Forum service : ${response.body}");
       applyChange();
     } else {
-      debugPrint(response.reasonPhrase);
       debugPrint(response.body);
       throw Exception('Impossible de créer un forum ${response.statusCode}');
     }
@@ -37,7 +36,7 @@ class ForumService extends ChangeNotifier {
   }
 
   Future<List<Forum>> getForumList() async {
-    final response = await http.get(Uri.parse('$baseUrlUserList'));
+    final response = await http.get(Uri.parse(baseUrlUserList));
 
     if (response.statusCode == 200) {
       List<dynamic> body = jsonDecode(utf8.decode(response.bodyBytes));
@@ -45,11 +44,24 @@ class ForumService extends ChangeNotifier {
       print('Resultat attendue : ${response.statusCode}');
       debugPrint('Forum service ${response.body}');
       return forumList;
-    }else{
-       print('Échec de la requête avec le code d\'état: ${response.statusCode}');
+    } else {
+      print('Échec de la requête avec le code d\'état: ${response.statusCode}');
       throw Exception(jsonDecode(utf8.decode(response.bodyBytes))["message"]);
     }
   }
+
+  // Future<void> deleteForum(int idForum, int idUtilisateur) async {
+  //   final responses = http.delete(Uri.parse(
+  //       'http://10.0.2.2:8080/Forum/deleteForUtilisateur/$idForum/utilisateur/$idUtilisateur'));
+  //   headers:
+  //   <String, String>{'Content-Type': 'application/json'};
+
+  //   if (responses.statutCode == 200) {
+  //     applyChange();
+  //   } else {
+  //     throw Exception(jsonDecode(utf8.decode(responses.bodyBytes))["message"]);
+  //   }
+  // }
   // Future<List<Forum>> getForumList(int id) async {
   //   final response = await http.get(Uri.parse('$baseUrlUserList$id'));
 
