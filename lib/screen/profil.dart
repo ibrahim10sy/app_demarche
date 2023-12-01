@@ -32,111 +32,121 @@ class _ProfilState extends State<Profil> {
       backgroundColor: d_red,
       appBar: const CustomAppBar(),
       body: Stack(
+        alignment: AlignmentDirectional.topCenter,
         children: [
           Column(
             children: [
-              Positioned(
-                top: 200,
-                // left: 85,
-                child: Consumer<UtilisateurProvider>(
-                    builder: (context, utilisateurprovider, child) {
-                  final user = utilisateurprovider.utilisateur;
-                  return user?.image == null || user?.image?.isEmpty == true
-                      ? CircleAvatar(
-                          backgroundColor: d_red,
-                          radius: 28,
-                          child: Text(
-                            "${user!.prenom.substring(0, 1).toUpperCase()}${user.nom.substring(0, 1).toUpperCase()}",
-                            style: const TextStyle(
-                                fontSize: 25,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                                letterSpacing: 2),
-                          ),
-                        )
-                      : ClipRRect(
-                          borderRadius: BorderRadius.circular(200.0),
-                          child: SizedBox(
-                            width: 210.0,
-                            height: 210.0,
-                            child: Image.network(
-                              "http://10.0.2.2/${user!.image!}",
-                              // fit: BoxFit.fill,
-                              fit: BoxFit
-                                  .cover, // ou BoxFit.contain, BoxFit.fill, etc.
-                              // scale: 0.5,
-                            ),
-                          ));
-                }),
+              const SizedBox(
+                height: 100,
               ),
-              Expanded(
-                child: Container(
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(80.0),
-                        topRight: Radius.circular(
-                            80.0), // Arrondir le coin supérieur droit
+              Positioned(
+                bottom: 0, // Position en bas
+                left: 0,
+                child: Expanded(
+                  child: Container(
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(80.0),
+                          topRight: Radius.circular(
+                              80.0), // Arrondir le coin supérieur droit
+                        ),
                       ),
-                    ),
-                    height: MediaQuery.of(context).size.height *
-                        0.8, // 80% de la hauteur de l'écran
-                    width: MediaQuery.of(context).size.width,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 110),
-                        Consumer<UtilisateurProvider>(
-                            builder: (context, utilisateurprovider, child) {
-                          final user = utilisateurprovider.utilisateur;
-                          return Column(
-                            children: [
-                               Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Text(
-                            "Nom : ${user!.nom.toUpperCase()} ${user.prenom.toUpperCase()}",
-                            style: const TextStyle(
-                                fontSize: 22, fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Text(
-                            "Email : ${user.email}",
-                            style: const TextStyle(
-                                fontSize: 22, fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                            ],
-                          );
-                        }),
-                        OutlinedButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const UpdateProfil()),
+                      height: MediaQuery.of(context).size.height *
+                          0.7, // 80% de la hauteur de l'écran
+                      width: MediaQuery.of(context).size.width,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          const SizedBox(height: 160),
+                          Consumer<UtilisateurProvider>(
+                              builder: (context, utilisateurprovider, child) {
+                            final user = utilisateurprovider.utilisateur;
+                            return Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Text(
+                                    "Nom : ${user!.nom.toUpperCase()} ${user.prenom.toUpperCase()}",
+                                    style: const TextStyle(
+                                        fontSize: 22,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Text(
+                                    "Email : ${user.email}",
+                                    style: const TextStyle(
+                                        fontSize: 22,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ],
                             );
-                          },
-                          style: ButtonStyle(
-                            side: MaterialStateProperty.all(const BorderSide(
-                              color: d_red,
-                            )),
-                            padding: MaterialStateProperty.all(
-                                const EdgeInsets.all(10)),
-                          ),
-                          child: const Text(
-                            'Modifier profil',
-                            style: TextStyle(
-                              color: d_red,
-                              fontSize: 20,
+                          }),
+                          OutlinedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const UpdateProfil()),
+                              );
+                            },
+                            style: ButtonStyle(
+                              side: MaterialStateProperty.all(const BorderSide(
+                                color: d_red,
+                              )),
+                              padding: MaterialStateProperty.all(
+                                  const EdgeInsets.all(10)),
                             ),
-                          ),
-                        )
-                      ],
-                    )),
+                            child: const Text(
+                              'Modifier profil',
+                              style: TextStyle(
+                                color: d_red,
+                                fontSize: 20,
+                              ),
+                            ),
+                          )
+                        ],
+                      )),
+                ),
               ),
             ],
+          ),
+          Positioned(
+            // bottom: 20,
+            // left: 85,
+            child: Consumer<UtilisateurProvider>(
+                builder: (context, utilisateurprovider, child) {
+              final user = utilisateurprovider.utilisateur;
+              return user?.image == null || user?.image?.isEmpty == true
+                  ? CircleAvatar(
+                      backgroundColor: d_red,
+                      radius: 28,
+                      child: Text(
+                        "${user!.prenom.substring(0, 1).toUpperCase()}${user.nom.substring(0, 1).toUpperCase()}",
+                        style: const TextStyle(
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                            letterSpacing: 2),
+                      ),
+                    )
+                  : ClipRRect(
+                      borderRadius: BorderRadius.circular(200.0),
+                      child: SizedBox(
+                        width: 210.0,
+                        height: 210.0,
+                        child: Image.network(
+                          "http://10.0.2.2/${user!.image!}",
+                          // fit: BoxFit.fill,
+                          fit: BoxFit
+                              .cover, // ou BoxFit.contain, BoxFit.fill, etc.
+                          // scale: 0.5,
+                        ),
+                      ));
+            }),
           ),
         ],
       ),
