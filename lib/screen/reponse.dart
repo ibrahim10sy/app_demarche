@@ -77,57 +77,125 @@ class _ReponsesState extends State<Reponses> {
   Widget buildReponseItem(Reponse reponse, bool isCurrentUser) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Row(
-        mainAxisAlignment:
-            isCurrentUser ? MainAxisAlignment.end : MainAxisAlignment.start,
-        children: [
-          isCurrentUser
-              ? Expanded(
-                  child: Container(
-                    width: 100,
-                    padding: const EdgeInsets.all(8),
-                    decoration: const BoxDecoration(
-                      color: Colors.greenAccent,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(10),
-                        bottomLeft: Radius.circular(10),
-                        bottomRight: Radius.circular(30),
-                        topRight: Radius.circular(30),
+      child: GestureDetector(
+        onDoubleTap: () {
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: const Text("Suppression"),
+                  content: const Text(
+                    "Voulez-vous vraiment supprimer",
+                    style: TextStyle(fontSize: 18, color: Colors.red),
+                  ),
+                  actions: [
+                    TextButton(
+                        onPressed: () async {
+                          await Provider.of<ReponseService>(
+                            context,
+                            listen: false,
+                          )
+                              .deleteForReponse(reponse.idReponse,
+                                  reponse.utilisateur.idUtilisateur!)
+                              .then((value) => {Navigator.of(context).pop()})
+                              .catchError((onError) {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: const Text("onError"),
+                                    actions: [
+                                      TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: const Text('OK'))
+                                    ],
+                                  );
+                                });
+                          });
+                        },
+                        child: const Text(
+                          'OUI',
+                          style: TextStyle(fontSize: 20, color: Colors.red),
+                        )),
+                    TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text(
+                          'Non',
+                          style: TextStyle(fontSize: 20, color: d_red),
+                        ))
+                  ],
+                );
+              });
+        },
+        child: Row(
+          mainAxisAlignment:
+              isCurrentUser ? MainAxisAlignment.end : MainAxisAlignment.start,
+          children: [
+            isCurrentUser
+                ? Expanded(
+                    child: Container(
+                      width: 100,
+                      padding: const EdgeInsets.all(8),
+                      decoration: const BoxDecoration(
+                        color: Colors.greenAccent,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(10),
+                          bottomLeft: Radius.circular(10),
+                          bottomRight: Radius.circular(30),
+                          topRight: Radius.circular(30),
+                        ),
+                      ),
+                      child: Text(
+                        reponse.reponse,
+                        style: const TextStyle(
+                            fontSize: 20,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold),
                       ),
                     ),
-                    child: Text(
-                      reponse.reponse,
-                      style: const TextStyle(
-                          fontSize: 20,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                )
-              : Expanded(
-                  child: Container(
-                    width: 100,
-                    padding: const EdgeInsets.all(8),
-                    decoration: const BoxDecoration(
-                      color: Colors.grey,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(10),
-                        bottomLeft: Radius.circular(10),
-                        bottomRight: Radius.circular(30),
-                        topRight: Radius.circular(30),
+                  )
+                : Expanded(
+                    child: Container(
+                      width: 100,
+                      padding: const EdgeInsets.all(8),
+                      decoration: const BoxDecoration(
+                        color: Colors.grey,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(10),
+                          bottomLeft: Radius.circular(10),
+                          bottomRight: Radius.circular(30),
+                          topRight: Radius.circular(30),
+                        ),
+                      ),
+                      child: Text(
+                        reponse.reponse,
+                        style: const TextStyle(
+                            fontSize: 20,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold),
                       ),
                     ),
-                    child: Text(
-                      reponse.reponse,
-                      style: const TextStyle(
-                          fontSize: 20,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold),
-                    ),
                   ),
+            const SizedBox(width: 8),
+            CircleAvatar(
+              radius: 28,
+              backgroundColor: dRed,
+              child: Text(
+                "${reponse.utilisateur.prenom.substring(0, 1).toUpperCase()}${reponse.utilisateur.nom.substring(0, 1).toUpperCase()}",
+                style: const TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  letterSpacing: 2,
                 ),
-          const SizedBox(width: 8),
-        ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

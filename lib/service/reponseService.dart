@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:demarche_app/model/Forum.dart';
 import 'package:demarche_app/model/Reponse.dart';
 import 'package:demarche_app/model/Utilisateur.dart';
@@ -39,9 +40,10 @@ class ReponseService extends ChangeNotifier {
     throw Exception('Impossible de créer une reponse');
   }
 
-  Future<List<Reponse>> fetchReponseByIdUser(int idUtilisateur,int idForum) async {
-    final response =
-        await http.get(Uri.parse('$baseUrl/readForUtilisateur/$idUtilisateur/$idForum'));
+  Future<List<Reponse>> fetchReponseByIdUser(
+      int idUtilisateur, int idForum) async {
+    final response = await http
+        .get(Uri.parse('$baseUrl/readForUtilisateur/$idUtilisateur/$idForum'));
 
     if (response.statusCode == 200) {
       List<dynamic> body = jsonDecode(utf8.decode(response.bodyBytes));
@@ -56,8 +58,9 @@ class ReponseService extends ChangeNotifier {
     }
   }
 
-  Future<List<Reponse>> fetchReponseAll(int idUtilisateur,int idForum) async {
-    final response = await http.get(Uri.parse('$baseUrl/readForOtherUtilisateurs/$idUtilisateur/$idForum'));
+  Future<List<Reponse>> fetchReponseAll(int idUtilisateur, int idForum) async {
+    final response = await http.get(
+        Uri.parse('$baseUrl/readForOtherUtilisateurs/$idUtilisateur/$idForum'));
 
     if (response.statusCode == 200) {
       List<dynamic> body = jsonDecode(utf8.decode(response.bodyBytes));
@@ -68,6 +71,18 @@ class ReponseService extends ChangeNotifier {
     } else {
       reponseByUser = [];
       print('Échec de la requête avec le code d\'état: ${response.statusCode}');
+      throw Exception(jsonDecode(utf8.decode(response.bodyBytes))["message"]);
+    }
+  }
+
+  Future<void> deleteForReponse(int idReponse, int idUtilisateur) async {
+    final response = await http.delete(Uri.parse(
+        'http://10.0.2.2:8080/Reponse/deleteForUtilisateur/$idReponse/utilisateur/$idUtilisateur'));
+    debugPrint("${response.statusCode}");
+
+    if (response.statusCode == 200) {
+      applyChange();
+    } else {
       throw Exception(jsonDecode(utf8.decode(response.bodyBytes))["message"]);
     }
   }
