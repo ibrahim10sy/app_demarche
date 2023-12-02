@@ -1,5 +1,5 @@
 import 'package:demarche_app/screen/home.dart';
-import 'package:demarche_app/screen/map.dart';
+import 'package:demarche_app/screen/map_page.dart';
 import 'package:flutter/material.dart';
 
 class Localisation extends StatefulWidget {
@@ -17,7 +17,7 @@ class _LocalisationState extends State<Localisation> {
     return const Scaffold(
       backgroundColor: Color.fromARGB(255, 245, 242, 242),
       appBar: CustomAppBar(),
-      body: PageMap(),
+      body: MapPage(),
     );
   }
 }

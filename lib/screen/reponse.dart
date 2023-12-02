@@ -6,7 +6,6 @@ import 'package:demarche_app/screen/forum.dart';
 import 'package:demarche_app/screen/nav.dart';
 import 'package:demarche_app/service/reponseService.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class Reponses extends StatefulWidget {
@@ -24,10 +23,7 @@ class _ReponsesState extends State<Reponses> {
   late Utilisateur utilisateur;
   late Forum forums;
 
-  late List<Reponse> reponseListyUser = [];
   late Future<List<Reponse>> _reponsesUser;
-
-  late List<Reponse> reponseListAll = [];
   late Future<List<Reponse>> _reponseList;
   var reponseService = ReponseService();
 
@@ -45,10 +41,95 @@ class _ReponsesState extends State<Reponses> {
         Provider.of<UtilisateurProvider>(context, listen: false).utilisateur!;
     forums = widget.forum;
     _reponsesUser = fetchForUser(utilisateur.idUtilisateur!, forums.idForum);
-    _reponsesUser.printInfo();
     _reponseList = fetchAll(utilisateur.idUtilisateur!, forums.idForum);
-    _reponseList.printInfo();
     super.initState();
+  }
+
+  Widget buildReponsesList(
+      Future<List<Reponse>> Function() fetchFunction, bool isCurrentUser) {
+    return Consumer<ReponseService>(builder: (context, responseService, child) {
+      return FutureBuilder(
+        future: fetchFunction(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          if (!snapshot.hasData) {
+            return const Center(
+              child: Text("Aucune réponse trouvée"),
+            );
+          } else {
+            List<Reponse> reponseList = snapshot.data!;
+            return Column(
+              children: reponseList.map((Reponse reponse) {
+                return buildReponseItem(reponse, isCurrentUser);
+              }).toList(),
+            );
+          }
+        },
+      );
+    });
+  }
+
+  Widget buildReponseItem(Reponse reponse, bool isCurrentUser) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Row(
+        mainAxisAlignment:
+            isCurrentUser ? MainAxisAlignment.end : MainAxisAlignment.start,
+        children: [
+          isCurrentUser
+              ? Expanded(
+                  child: Container(
+                    width: 100,
+                    padding: const EdgeInsets.all(8),
+                    decoration: const BoxDecoration(
+                      color: Colors.greenAccent,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(10),
+                        bottomLeft: Radius.circular(10),
+                        bottomRight: Radius.circular(30),
+                        topRight: Radius.circular(30),
+                      ),
+                    ),
+                    child: Text(
+                      reponse.reponse,
+                      style: const TextStyle(
+                          fontSize: 20,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                )
+              : Expanded(
+                  child: Container(
+                    width: 100,
+                    padding: const EdgeInsets.all(8),
+                    decoration: const BoxDecoration(
+                      color: Colors.grey,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(10),
+                        bottomLeft: Radius.circular(10),
+                        bottomRight: Radius.circular(30),
+                        topRight: Radius.circular(30),
+                      ),
+                    ),
+                    child: Text(
+                      reponse.reponse,
+                      style: const TextStyle(
+                          fontSize: 20,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+          const SizedBox(width: 8),
+        ],
+      ),
+    );
   }
 
   @override
@@ -56,94 +137,22 @@ class _ReponsesState extends State<Reponses> {
     return Scaffold(
       appBar: const CustomAppBar(),
       body: Stack(children: [
-        // Center(
-        //   child: Text(
-        //     'Forum crée ${forums.utilisateur.nom} ${forums.utilisateur.prenom}',
-        //     style: const TextStyle(fontSize: 18),
-        //   ),
-        // ),
-
         // Widget pour afficher le contenu principal du chat
         ListView(
           padding: const EdgeInsets.all(8.0),
           children: <Widget>[
-            Container(),
-            // Container pour les réponses des autres utilisateurs
-            Consumer<ReponseService>(
-              builder: (context, responseService, child) {
-                return FutureBuilder(
-                  future: responseService.fetchReponseByIdUser(
-                    utilisateur.idUtilisateur!,
-                    forums.idForum,
-                  ),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-            
-                    if (!snapshot.hasData) {
-                      return Center(
-                        child: Text("Aucune réponse trouvée"),
-                      );
-                    } else {
-                      reponseListyUser = snapshot.data!;
-                      return Column(
-                        children: reponseListyUser.map((Reponse reponse) {
-                          return Padding(
-                            padding:
-                                const EdgeInsets.symmetric(vertical: 8.0),
-                            child: Row(
-                              mainAxisAlignment:
-                                  MainAxisAlignment.end, //alignement à droite
-                              children: [
-                                Expanded(
-                                  child: Container(
-                                    width: 100,
-                                    padding: const EdgeInsets.all(8),
-                                    decoration: BoxDecoration(
-                                      color: Colors.greenAccent,
-                                      borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(10),
-                                        bottomLeft: Radius.circular(10),
-                                        bottomRight: Radius.circular(30),
-                                        topRight: Radius.circular(30),
-                                      ),
-                                    ),
-                                    child: Text(
-                                      reponse.reponse,
-                                      style: TextStyle(
-                                          fontSize: 20,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(width: 8),
-                                CircleAvatar(
-                                  radius: 28,
-                                  backgroundColor: d_red,
-                                  child: Text(
-                                    "${reponse.utilisateur.prenom.substring(0, 1).toUpperCase()}${reponse.utilisateur.nom.substring(0, 1).toUpperCase()}",
-                                    style: const TextStyle(
-                                      fontSize: 25,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                      letterSpacing: 2,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        }).toList(),
-                      );
-                    }
-                  },
-                );
-              },
-            ),
+            buildReponsesList(
+                () => reponseService.fetchReponseAll(
+                      utilisateur.idUtilisateur!,
+                      forums.idForum,
+                    ),
+                false),
+            buildReponsesList(
+                () => reponseService.fetchReponseByIdUser(
+                      utilisateur.idUtilisateur!,
+                      forums.idForum,
+                    ),
+                true)
           ],
         ),
 
@@ -181,7 +190,7 @@ class _ReponsesState extends State<Reponses> {
                           utilisateur: utilisateur)
                       .then((value) {
                     print('Message envoyé: $message');
-                    
+
                     reponseController.clear();
                   }).catchError((onError) {
                     print('Une erreur est survenue lors de l\'envoie $onError');

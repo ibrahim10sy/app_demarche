@@ -38,17 +38,6 @@ class _DocumentScreenState extends State<DocumentScreen> {
               const SizedBox(
                 height: 10,
               ),
-              // Expanded(
-              //   child: Container(
-              //     decoration: const BoxDecoration(),
-              //     width: double.infinity,
-              //     padding: const EdgeInsets.all(10),
-              //     child: Image.network(
-              //       documents.image!,
-              //       scale: 0.2,
-              //     ),
-              //   ),
-              // ),
               ClipRRect(
                 borderRadius: BorderRadius.circular(80),
                 // width: double.infinity,
@@ -86,7 +75,7 @@ class _DocumentScreenState extends State<DocumentScreen> {
                 child: Padding(
                   padding: const EdgeInsets.all(15.0),
                   child: Container(
-                    height: 400,
+                    height: 450,
                     width: 300,
                     decoration: BoxDecoration(
                         color: Colors.white,
@@ -99,7 +88,7 @@ class _DocumentScreenState extends State<DocumentScreen> {
                             offset: Offset(0, 3),
                           )
                         ]),
-                    child: ListView(
+                    child: Column(
                       children: [
                         const SizedBox(
                           height: 8,

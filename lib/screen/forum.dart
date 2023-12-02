@@ -141,35 +141,6 @@ class _ForumsState extends State<Forums> {
                                               String description =
                                                   descController.text;
 
-                                              // if (libelle.isEmpty ||
-                                              //     description.isEmpty) {
-                                              //   const String errorMessage =
-                                              //       "Champs titre doit être renseigner";
-                                              //   showDialog(
-                                              //       context: context,
-                                              //       builder:
-                                              //           (BuildContext context) {
-                                              //         return AlertDialog(
-                                              //           title: const Center(
-                                              //               child:
-                                              //                   Text('Erreur')),
-                                              //           content: const Text(
-                                              //               errorMessage),
-                                              //           actions: <Widget>[
-                                              //             TextButton(
-                                              //               onPressed: () {
-                                              //                 Navigator.of(
-                                              //                         context)
-                                              //                     .pop();
-                                              //               },
-                                              //               child: const Text(
-                                              //                   'Ok'),
-                                              //             )
-                                              //           ],
-                                              //         );
-                                              //       });
-                                              //   return;
-                                              // }
                                               await Provider.of<ForumService>(
                                                       context,
                                                       listen: false)
@@ -179,16 +150,15 @@ class _ForumsState extends State<Forums> {
                                                       description: description,
                                                       utilisateur: utilisateur)
                                                   .then((value) {
-                                                     Navigator.of(context).pop();
+                                                Navigator.of(context).pop();
                                                 libelleController.clear();
                                                 descController.clear();
                                                 libelleController.clear();
                                                 descController.clear();
-                                               
                                               }).catchError((onError) {
                                                 final String errorMessage =
                                                     onError.toString();
-                                              
+
                                                 showDialog(
                                                     context: context,
                                                     builder:
@@ -285,8 +255,7 @@ class _ForumsState extends State<Forums> {
                   child: const Text('Créer un forum')),
             ),
           ),
-          Consumer<ForumService>(
-            builder: (context, forumService, child) {
+          Consumer<ForumService>(builder: (context, forumService, child) {
             return FutureBuilder(
                 future: forumService.getForumList(),
                 builder: (context, snapshot) {
@@ -375,7 +344,88 @@ class _ForumsState extends State<Forums> {
                                                   ),
                                                 ),
                                                 IconButton(
-                                                    onPressed: () {},
+                                                    onPressed: () => showDialog(
+                                                        context: context,
+                                                        builder: (BuildContext
+                                                            context) {
+                                                          return AlertDialog(
+                                                            title: const Text(
+                                                                "Suppression"),
+                                                            content: const Text(
+                                                              "Voulez-vous vraiment supprimer",
+                                                              style: TextStyle(
+                                                                  fontSize: 18,
+                                                                  color: Colors
+                                                                      .red),
+                                                            ),
+                                                            actions: [
+                                                              TextButton(
+                                                                  onPressed:
+                                                                      () async {
+                                                                    await Provider.of<
+                                                                            ForumService>(
+                                                                      context,
+                                                                      listen:
+                                                                          false,
+                                                                    )
+                                                                        .deleteForumById(
+                                                                            forum
+                                                                                .idForum,
+                                                                            forum
+                                                                                .utilisateur.idUtilisateur!)
+                                                                        .then((value) =>
+                                                                            {
+                                                                              Navigator.of(context).pop()
+                                                                            })
+                                                                        .catchError(
+                                                                            (onError) {
+                                                                      showDialog(
+                                                                          context:
+                                                                              context,
+                                                                          builder:
+                                                                              (BuildContext context) {
+                                                                            return AlertDialog(
+                                                                              title: const Text("Erreur de suppression"),
+                                                                              content: const Text("Vous n'êtes pas autorisé à supprimer un forum que vous n'avez pas créer"),
+                                                                              actions: [
+                                                                                TextButton(
+                                                                                    onPressed: () {
+                                                                                      Navigator.of(context).pop();
+                                                                                    },
+                                                                                    child: const Text('OK'))
+                                                                              ],
+                                                                            );
+                                                                          });
+                                                                    });
+                                                                  },
+                                                                  child:
+                                                                      const Text(
+                                                                    'OUI',
+                                                                    style: TextStyle(
+                                                                        fontSize:
+                                                                            20,
+                                                                        color: Colors
+                                                                            .red),
+                                                                  )),
+                                                              TextButton(
+                                                                  onPressed:
+                                                                      () {
+                                                                    Navigator.of(
+                                                                            context)
+                                                                        .pop();
+                                                                  },
+                                                                  child:
+                                                                      const Text(
+                                                                    'Non',
+                                                                    style: TextStyle(
+                                                                        fontSize:
+                                                                            20,
+                                                                        color:
+                                                                            d_red),
+                                                                  ))
+                                                            ],
+                                                          );
+                                                        }),
                                                     icon: const Icon(
                                                       Icons.restore_from_trash,
                                                       size: 30,

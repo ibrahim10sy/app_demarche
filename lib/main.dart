@@ -1,6 +1,6 @@
+import 'package:demarche_app/provider/forumProvider.dart';
 import 'package:demarche_app/provider/reponseProvider.dart';
 import 'package:demarche_app/provider/utilisateurProvider.dart';
-import 'package:demarche_app/provider/forumProvider.dart';
 import 'package:demarche_app/screen/home_splash.dart';
 import 'package:demarche_app/service/forumService.dart';
 import 'package:demarche_app/service/reponseService.dart';
@@ -12,8 +12,8 @@ const d_red = Color(0x001c2481);
 
 void main() {
   runApp(MultiProvider(providers: [
-     ChangeNotifierProvider(create: (context) => UtilisateurProvider()),
-     ChangeNotifierProvider(create: (context) => UtilisateurService()),
+    ChangeNotifierProvider(create: (context) => UtilisateurProvider()),
+    ChangeNotifierProvider(create: (context) => UtilisateurService()),
     ChangeNotifierProvider(create: (context) => ForumProvider()),
     ChangeNotifierProvider(create: (context) => ForumService()),
     ChangeNotifierProvider(create: (context) => ReponseProvider()),
@@ -36,5 +36,5 @@ class _MyAppState extends State<MyApp> {
         debugShowCheckedModeBanner: false,
         title: 'Demarche facile',
         home: Home_splash());
-  } 
+  }
 }

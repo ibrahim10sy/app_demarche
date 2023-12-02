@@ -1,6 +1,4 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:convert';
-
 import 'package:demarche_app/model/Admin.dart';
 
 class Bureau {
@@ -61,41 +59,17 @@ class Bureau {
       adresse: map['adresse'] as String,
       latitude: map['latitude'] as String,
       longitude: map['longitude'] as String,
-      admin: Admin.fromMap(map['admin'] as Map<String,dynamic>),
+      admin: Admin.fromMap(map['admin'] as Map<String, dynamic>),
     );
   }
 
-  String toJson() => json.encode(toMap());
-
-  factory Bureau.fromJson(String source) => Bureau.fromMap(json.decode(source) as Map<String, dynamic>);
-
-  @override
-  String toString() {
-    return 'Bureau(idBureau: $idBureau, nom: $nom, ville: $ville, adresse: $adresse, latitude: $latitude, longitude: $longitude, admin: $admin)';
-  }
-
-  @override
-  bool operator ==(covariant Bureau other) {
-    if (identical(this, other)) return true;
-  
-    return 
-      other.idBureau == idBureau &&
-      other.nom == nom &&
-      other.ville == ville &&
-      other.adresse == adresse &&
-      other.latitude == latitude &&
-      other.longitude == longitude &&
-      other.admin == admin;
-  }
-
-  @override
-  int get hashCode {
-    return idBureau.hashCode ^
-      nom.hashCode ^
-      ville.hashCode ^
-      adresse.hashCode ^
-      latitude.hashCode ^
-      longitude.hashCode ^
-      admin.hashCode;
+  factory Bureau.fromJson(Map<String, dynamic> json) {
+    return Bureau(
+        nom: json['nom'],
+        ville: json['ville'],
+        adresse: json['adresse'],
+        latitude: json['latitude'],
+        longitude: json['longitude'],
+        admin: json['admin']);
   }
 }
