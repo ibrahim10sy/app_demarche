@@ -25,7 +25,7 @@ class ForumService extends ChangeNotifier {
     final response = await http.post(Uri.parse(baseUrlUser),
         headers: {'Content-Type': 'application/json'}, body: forum);
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 || response.statusCode == 201) {
       print("Forum service : ${response.body}");
       applyChange();
     } else {

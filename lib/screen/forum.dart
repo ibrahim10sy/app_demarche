@@ -41,7 +41,7 @@ class _ForumsState extends State<Forums> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 247, 245, 245),
+      backgroundColor: Colors.white,
       appBar: const CustomAppBar(),
       body: ListView(
         children: [
@@ -133,49 +133,49 @@ class _ForumsState extends State<Forums> {
                                               String description =
                                                   descController.text;
 
-                                              await Provider.of<ForumService>(
-                                                      context,
-                                                      listen: false)
-                                                  .creerForumByUser(
-                                                      context: context,
-                                                      libelle: libelle,
-                                                      description: description,
-                                                      utilisateur: utilisateur)
-                                                  .then((value) {
+                                              try {
+                                                await Provider.of<ForumService>(
+                                                  context,
+                                                  listen: false,
+                                                ).creerForumByUser(
+                                                  context: context,
+                                                  libelle: libelle,
+                                                  description: description,
+                                                  utilisateur: utilisateur,
+                                                );
+
                                                 Navigator.of(context).pop();
                                                 libelleController.clear();
                                                 descController.clear();
-                                                libelleController.clear();
-                                                descController.clear();
-                                              }).catchError((onError) {
+                                              } catch (onError) {
                                                 final String errorMessage =
                                                     onError.toString();
 
                                                 showDialog(
-                                                    context: context,
-                                                    builder:
-                                                        (BuildContext context) {
-                                                      return AlertDialog(
-                                                        title: const Center(
-                                                            child:
-                                                                Text('Erreur')),
-                                                        content:
-                                                            Text(errorMessage),
-                                                        actions: <Widget>[
-                                                          TextButton(
-                                                            onPressed: () {
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .pop();
-                                                            },
-                                                            child: const Text(
-                                                                'Ok'),
-                                                          ),
-                                                        ],
-                                                      );
-                                                    });
-                                              });
-                                              Navigator.of(context).pop();
+                                                  context: context,
+                                                  builder:
+                                                      (BuildContext context) {
+                                                    return AlertDialog(
+                                                      title: const Center(
+                                                          child:
+                                                              Text('Erreur')),
+                                                      content:
+                                                          Text(errorMessage),
+                                                      actions: <Widget>[
+                                                        TextButton(
+                                                          onPressed: () {
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop();
+                                                          },
+                                                          child:
+                                                              const Text('Ok'),
+                                                        ),
+                                                      ],
+                                                    );
+                                                  },
+                                                );
+                                              }
                                             },
                                             style: ElevatedButton.styleFrom(
                                               elevation: 3,
@@ -272,7 +272,77 @@ class _ForumsState extends State<Forums> {
                     forumListe = snapshot.data!;
                     return Column(
                       children: forumListe.map((Forum forum) {
-                        return buildForumItem(forum);
+                        return GestureDetector(
+                            child: buildForumItem(forum),
+                            onDoubleTap: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: const Text("Suppression"),
+                                      content: const Text(
+                                        "Voulez-vous vraiment supprimer",
+                                        style: TextStyle(
+                                            fontSize: 18, color: Colors.red),
+                                      ),
+                                      actions: [
+                                        TextButton(
+                                            onPressed: () async {
+                                              await Provider.of<ForumService>(
+                                                context,
+                                                listen: false,
+                                              )
+                                                  .deleteForumById(
+                                                      forum.idForum,
+                                                      forum.utilisateur
+                                                          .idUtilisateur!)
+                                                  .then((value) => {
+                                                        Navigator.of(context)
+                                                            .pop()
+                                                      })
+                                                  .catchError((onError) {
+                                                showDialog(
+                                                    context: context,
+                                                    builder:
+                                                        (BuildContext context) {
+                                                      return AlertDialog(
+                                                        title: const Text(
+                                                            "Erreur de suppression"),
+                                                        content: const Text(
+                                                            "Vous n'êtes pas autorisé à supprimer un forum que vous n'avez pas créer"),
+                                                        actions: [
+                                                          TextButton(
+                                                              onPressed: () {
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .pop();
+                                                              },
+                                                              child: const Text(
+                                                                  'OK'))
+                                                        ],
+                                                      );
+                                                    });
+                                              });
+                                            },
+                                            child: const Text(
+                                              'OUI',
+                                              style: TextStyle(
+                                                  fontSize: 20,
+                                                  color: Colors.red),
+                                            )),
+                                        TextButton(
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: const Text(
+                                              'Non',
+                                              style: TextStyle(
+                                                  fontSize: 20, color: d_red),
+                                            ))
+                                      ],
+                                    );
+                                  });
+                            });
                       }).toList(),
                     );
                   }
@@ -286,6 +356,8 @@ class _ForumsState extends State<Forums> {
   }
 
   Widget buildForumItem(Forum forum) {
+    color:
+    Colors.white;
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -296,6 +368,7 @@ class _ForumsState extends State<Forums> {
       child: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Card(
+          color: Colors.white,
           child: ListTile(
             leading: const CircleAvatar(
               radius: 30,
