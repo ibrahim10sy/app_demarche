@@ -51,12 +51,11 @@ class _ForumsState extends State<Forums> {
           Align(
             alignment: Alignment.centerRight,
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    shape: const StadiumBorder(),
-                    backgroundColor: const Color.fromRGBO(28, 36, 129, 1.0),
-                    padding: const EdgeInsets.all(12),
+                padding: const EdgeInsets.all(8.0),
+                child: TextButton(
+                  child: const Text(
+                    " + Créer un forum",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   onPressed: () {
                     showDialog(
@@ -133,49 +132,24 @@ class _ForumsState extends State<Forums> {
                                               String description =
                                                   descController.text;
 
-                                              try {
-                                                await Provider.of<ForumService>(
-                                                  context,
-                                                  listen: false,
-                                                ).creerForumByUser(
-                                                  context: context,
-                                                  libelle: libelle,
-                                                  description: description,
-                                                  utilisateur: utilisateur,
-                                                );
-
-                                                Navigator.of(context).pop();
+                                              await Provider.of<ForumService>(
+                                                context,
+                                                listen: false,
+                                              )
+                                                  .creerForumByUser(
+                                                context: context,
+                                                libelle: libelle,
+                                                description: description,
+                                                utilisateur: utilisateur,
+                                              )
+                                                  .then((value) {
                                                 libelleController.clear();
                                                 descController.clear();
-                                              } catch (onError) {
-                                                final String errorMessage =
-                                                    onError.toString();
-
-                                                showDialog(
-                                                  context: context,
-                                                  builder:
-                                                      (BuildContext context) {
-                                                    return AlertDialog(
-                                                      title: const Center(
-                                                          child:
-                                                              Text('Erreur')),
-                                                      content:
-                                                          Text(errorMessage),
-                                                      actions: <Widget>[
-                                                        TextButton(
-                                                          onPressed: () {
-                                                            Navigator.of(
-                                                                    context)
-                                                                .pop();
-                                                          },
-                                                          child:
-                                                              const Text('Ok'),
-                                                        ),
-                                                      ],
-                                                    );
-                                                  },
-                                                );
-                                              }
+                                                Navigator.of(context).pop();
+                                              }).catchError((onError) {
+                                                print(
+                                                    'Une erreur est survenue lors de l\'envoie $onError');
+                                              });
                                             },
                                             style: ElevatedButton.styleFrom(
                                               elevation: 3,
@@ -244,14 +218,7 @@ class _ForumsState extends State<Forums> {
                                       ])),
                             )));
                   },
-                  child: const Text(
-                    'Créer un forum',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold),
-                  )),
-            ),
+                )),
           ),
           Consumer<ForumService>(
             builder: (context, forumService, child) {

@@ -20,15 +20,31 @@ class _MapPageState extends State<MapPage> {
   final LatLng _center = const LatLng(12.65906, -7.98552);
   late Future<List<Bureau>> _bureauListe;
   var bureauService = BureauService();
+  LatLng? _currentP;
 
   Future<List<Bureau>> getBureau() async {
     return bureauService.fetchbureau();
+  }
+
+  //Methodde pour recuperer la position de l'utilisateur
+
+  Future<void> _getUserLocation() async {
+    try {
+      var userLocation = await _locationController.getLocation();
+      setState(() {
+        _currentP = LatLng(userLocation.latitude!, userLocation.longitude!);
+      });
+    } catch (e) {
+      print(
+          "Erreur lors de la recuperation de la position de l'utilisateur : $e");
+    }
   }
 
   @override
   void initState() {
     super.initState();
     _bureauListe = getBureau();
+    _getUserLocation();
   }
 
   @override
@@ -49,31 +65,26 @@ class _MapPageState extends State<MapPage> {
                       _mapController.complete(controller),
                   initialCameraPosition:
                       CameraPosition(target: _center, zoom: 13),
-                  markers: Set.from(snapshot.data!.map((bureauLocation) =>
+                  markers: {
+                    if (_currentP != null)
                       Marker(
-                          markerId:
-                              MarkerId(bureauLocation.idBureau.toString()),
-                          position: LatLng(
-                              double.parse(bureauLocation.latitude),
-                              double.parse(bureauLocation.longitude)),
-                          infoWindow: InfoWindow(title: bureauLocation.nom)))),
+                        markerId: const MarkerId("userLocation"),
+                        position: _currentP!,
+                        infoWindow: const InfoWindow(title: "Votre position"),
+                      ),
+                    ...snapshot.data!.map(
+                      (bureauLocation) => Marker(
+                        markerId: MarkerId(bureauLocation.idBureau.toString()),
+                        position: LatLng(
+                          double.parse(bureauLocation.latitude),
+                          double.parse(bureauLocation.longitude),
+                        ),
+                        infoWindow: InfoWindow(title: bureauLocation.nom),
+                      ),
+                    )
+                  },
                 );
               }
             }));
   }
 }
-
-
-
-// GoogleMap(
-//           onMapCreated: (GoogleMapController controller) =>
-//               _mapController.complete(controller),
-//           initialCameraPosition: CameraPosition(target: _center, zoom: 13),
-//           markers: {
-//             Marker(
-//                 markerId: const MarkerId("Ma position"),
-//                 position: _center,
-//                 infoWindow: const InfoWindow(
-//                   title: "position",
-//                 ))
-//           }),
