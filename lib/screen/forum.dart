@@ -66,14 +66,6 @@ class _ForumsState extends State<Forums> {
                                 borderRadius: BorderRadius.circular(20)),
                             titlePadding:
                                 const EdgeInsets.only(top: 0, left: 0),
-                            title: Container(
-                              child: const Row(children: [
-                                // Container(
-                                //   padding : const EdgeInsets.only(top:8, left:10, right:8),
-                                //   ch
-                                // )
-                              ]),
-                            ),
                             content: SingleChildScrollView(
                               child: Form(
                                   key: _formKey,
@@ -252,11 +244,18 @@ class _ForumsState extends State<Forums> {
                                       ])),
                             )));
                   },
-                  child: const Text('Créer un forum')),
+                  child: const Text(
+                    'Créer un forum',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold),
+                  )),
             ),
           ),
-          Consumer<ForumService>(builder: (context, forumService, child) {
-            return FutureBuilder(
+          Consumer<ForumService>(
+            builder: (context, forumService, child) {
+              return FutureBuilder(
                 future: forumService.getForumList(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
@@ -267,188 +266,57 @@ class _ForumsState extends State<Forums> {
 
                   if (!snapshot.hasData) {
                     return const Center(
-                      child: Text("Aucune donnée trouvé"),
+                      child: Text("Aucune donnée trouvée"),
                     );
                   } else {
                     forumListe = snapshot.data!;
                     return Column(
-                        children: forumListe.map((Forum forum) {
-                      return GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      Reponses(forum: forum)));
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Expanded(
-                            child: Container(
-                              width: double.infinity,
-                              height: 220,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Colors.white,
-                                boxShadow: const [
-                                  BoxShadow(
-                                    offset: Offset(0.0, 0.0),
-                                    blurRadius: 5.0,
-                                    color: Color.fromRGBO(0, 0, 0, 0.38),
-                                  )
-                                ],
-                              ),
-                              child: Stack(
-                                children: [
-                                  // Image en haut du Container
-                                  Positioned(
-                                    top: 0,
-                                    left: 0,
-                                    right: 0,
-                                    bottom: 80, // Ajustez selon votre besoin
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(10),
-                                      child: Image.asset(
-                                        "assets/images/forum.jpg",
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  ),
-                                  // Contenu en bas du Container
-                                  Positioned(
-                                    bottom: 10,
-                                    // top: 10,
-                                    left: 0,
-                                    right: 0,
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Expanded(
-                                          child: Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                              horizontal: 15,
-                                              vertical: 10,
-                                            ),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Text(
-                                                  forum.libelle,
-                                                  style: const TextStyle(
-                                                    fontSize: 22,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.black,
-                                                  ),
-                                                ),
-                                                IconButton(
-                                                    onPressed: () => showDialog(
-                                                        context: context,
-                                                        builder: (BuildContext
-                                                            context) {
-                                                          return AlertDialog(
-                                                            title: const Text(
-                                                                "Suppression"),
-                                                            content: const Text(
-                                                              "Voulez-vous vraiment supprimer",
-                                                              style: TextStyle(
-                                                                  fontSize: 18,
-                                                                  color: Colors
-                                                                      .red),
-                                                            ),
-                                                            actions: [
-                                                              TextButton(
-                                                                  onPressed:
-                                                                      () async {
-                                                                    await Provider.of<
-                                                                            ForumService>(
-                                                                      context,
-                                                                      listen:
-                                                                          false,
-                                                                    )
-                                                                        .deleteForumById(
-                                                                            forum
-                                                                                .idForum,
-                                                                            forum
-                                                                                .utilisateur.idUtilisateur!)
-                                                                        .then((value) =>
-                                                                            {
-                                                                              Navigator.of(context).pop()
-                                                                            })
-                                                                        .catchError(
-                                                                            (onError) {
-                                                                      showDialog(
-                                                                          context:
-                                                                              context,
-                                                                          builder:
-                                                                              (BuildContext context) {
-                                                                            return AlertDialog(
-                                                                              title: const Text("Erreur de suppression"),
-                                                                              content: const Text("Vous n'êtes pas autorisé à supprimer un forum que vous n'avez pas créer"),
-                                                                              actions: [
-                                                                                TextButton(
-                                                                                    onPressed: () {
-                                                                                      Navigator.of(context).pop();
-                                                                                    },
-                                                                                    child: const Text('OK'))
-                                                                              ],
-                                                                            );
-                                                                          });
-                                                                    });
-                                                                  },
-                                                                  child:
-                                                                      const Text(
-                                                                    'OUI',
-                                                                    style: TextStyle(
-                                                                        fontSize:
-                                                                            20,
-                                                                        color: Colors
-                                                                            .red),
-                                                                  )),
-                                                              TextButton(
-                                                                  onPressed:
-                                                                      () {
-                                                                    Navigator.of(
-                                                                            context)
-                                                                        .pop();
-                                                                  },
-                                                                  child:
-                                                                      const Text(
-                                                                    'Non',
-                                                                    style: TextStyle(
-                                                                        fontSize:
-                                                                            20,
-                                                                        color:
-                                                                            d_red),
-                                                                  ))
-                                                            ],
-                                                          );
-                                                        }),
-                                                    icon: const Icon(
-                                                      Icons.restore_from_trash,
-                                                      size: 30,
-                                                      color: Colors.red,
-                                                    ))
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      );
-                    }).toList());
+                      children: forumListe.map((Forum forum) {
+                        return buildForumItem(forum);
+                      }).toList(),
+                    );
                   }
-                });
-          }),
+                },
+              );
+            },
+          )
         ],
+      ),
+    );
+  }
+
+  Widget buildForumItem(Forum forum) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Reponses(forum: forum)),
+        );
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Card(
+          child: ListTile(
+            leading: const CircleAvatar(
+              radius: 30,
+              backgroundImage: AssetImage("assets/images/forum.jpg"),
+            ),
+            title: Text(
+              forum.libelle,
+              style: const TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+            ),
+            subtitle: Text(
+              "Créé par : ${forum.utilisateur.prenom} ${forum.utilisateur.nom}",
+              style: const TextStyle(
+                fontSize: 15,
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }

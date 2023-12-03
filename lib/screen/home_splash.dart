@@ -66,7 +66,10 @@ class Home_splash extends StatelessWidget {
                       padding: const EdgeInsets.all(17)),
                   child: const Text(
                     'Commencer',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
                   ),
                   onPressed: () {
                     Navigator.push(

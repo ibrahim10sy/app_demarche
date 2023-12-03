@@ -5,7 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:open_file/open_file.dart';
+//import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 
 class DocumentScreen extends StatefulWidget {
@@ -118,7 +118,7 @@ class _DocumentScreenState extends State<DocumentScreen> {
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 40, vertical: 15),
                             child: ElevatedButton(
-                              onPressed: () => pickFile(),
+                              onPressed: () {},
                               // onPressed: () {
                               //   _downloadPDF(documents);
                               // },
@@ -186,7 +186,7 @@ Future<void> _downloadPDF(Document document) async {
   }
 }
 
-Future openFile({required String url, String? fileName}) async {
+/*Future openFile({required String url, String? fileName}) async {
   final name = fileName ?? url.split('/').last;
   final file = await pickFile();
   // final file = await donwloadFile(url, name);
@@ -203,7 +203,7 @@ Future<File?> pickFile() async {
   }
   return null;
 }
-
+*/
 Future<File?> donwloadFile(String url, String name) async {
   final appStorage = await getApplicationDocumentsDirectory();
   final file = File('${appStorage.path}/$name');

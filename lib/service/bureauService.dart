@@ -2,15 +2,14 @@ import 'dart:convert';
 
 import 'package:demarche_app/model/Bureau.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
-class bureauService {
-   final String baseUrl = "http://10.0.2.2:8080/Bureau/read";
+class BureauService {
+  final String baseUrl = "http://10.0.2.2:8080/Bureau/read";
 
-   List<Bureau> bureau = [];
+  List<Bureau> bureau = [];
 
-    Future<List<Bureau>> fetchbureau() async {
+  Future<List<Bureau>> fetchbureau() async {
     final response = await http.get(Uri.parse(baseUrl));
 
     if (response.statusCode == 200) {

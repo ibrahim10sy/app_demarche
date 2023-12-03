@@ -5,6 +5,7 @@ import 'package:demarche_app/model/Utilisateur.dart';
 import 'package:demarche_app/provider/utilisateurProvider.dart';
 import 'package:demarche_app/screen/Home.dart';
 import 'package:demarche_app/screen/Inscription.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
@@ -24,6 +25,7 @@ class _Connexion_ScreenState extends State<Connexion_Screen> {
   // final mdp_controller = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController motDePasseController = TextEditingController();
+  String _errorMessage = '';
 
   String name = '';
   String email = '';
@@ -167,6 +169,16 @@ class _Connexion_ScreenState extends State<Connexion_Screen> {
                   ),
                 ),
               ),
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    textAlign: TextAlign.center,
+                    _errorMessage,
+                    style: const TextStyle(color: Colors.red),
+                  ),
+                ),
+              ),
               Form(
                 key: _formKey,
                 child: Column(
@@ -175,13 +187,17 @@ class _Connexion_ScreenState extends State<Connexion_Screen> {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 40, vertical: 16),
                         child: TextField(
+                          keyboardType: TextInputType.emailAddress,
                           controller: emailController,
                           style: const TextStyle(fontSize: 18.0),
+                          onChanged: (val) {
+                            validateEmail(val);
+                          },
                           decoration: const InputDecoration(
                             contentPadding: EdgeInsets.all(18.0),
-                            hintText: 'Nom d\'utilisateur ou email',
+                            labelText: 'Email ',
                             prefixIcon: Icon(
-                              Icons.person,
+                              Icons.email,
                               color: d_red,
                               size: 30.0,
                             ),
@@ -259,9 +275,9 @@ class _Connexion_ScreenState extends State<Connexion_Screen> {
                             child: const Text(
                               'Connexion',
                               style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
                             ),
                           )),
                     ),
@@ -297,9 +313,9 @@ class _Connexion_ScreenState extends State<Connexion_Screen> {
                                 Text(
                                   'Continue avec Google',
                                   style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
                                 ),
                               ],
                             ),
@@ -340,5 +356,21 @@ class _Connexion_ScreenState extends State<Connexion_Screen> {
             ],
           ),
         ));
+  }
+
+  void validateEmail(String val) {
+    if (val.isEmpty) {
+      setState(() {
+        _errorMessage = "Email ne doit pas être vide";
+      });
+    } else if (!EmailValidator.validate(val, true)) {
+      setState(() {
+        _errorMessage = "Email non valide";
+      });
+    } else {
+      setState(() {
+        _errorMessage = "";
+      });
+    }
   }
 }

@@ -44,7 +44,7 @@ dependencies:
   provider: ^6.1.1
   image_picker: ^1.0.4
   email_validator: ^2.1.17
-  open_file: ^3.3.2
+  # open_file: ^3.3.2
   file_picker: ^6.1.1
   google_maps_flutter: ^2.5.0
   dio: ^5.3.4
