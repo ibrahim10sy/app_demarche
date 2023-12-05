@@ -118,7 +118,34 @@ class _DocumentScreenState extends State<DocumentScreen> {
                                 horizontal: 40, vertical: 15),
                             child: ElevatedButton(
                               onPressed: () {
-                                _downloadPDF(documents);
+                                _downloadPDF(documents)
+                                    .then((value) => {
+                                          showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return AlertDialog(
+                                                  title: const Text(
+                                                      "Téléchargement du fichier"),
+                                                  content:
+                                                      const CircularProgressIndicator(
+                                                          color: d_red),
+                                                  actions: [
+                                                    TextButton(
+                                                        onPressed: () {
+                                                          Navigator.of(context)
+                                                              .pop();
+                                                        },
+                                                        child: const Text('OK'))
+                                                  ],
+                                                );
+                                              })
+                                        })
+                                    .catchError((onError) {
+                                  const Center(
+                                    child:
+                                        CircularProgressIndicator(color: d_red),
+                                  );
+                                });
                               },
                               style: ElevatedButton.styleFrom(
                                 shape: const StadiumBorder(),
