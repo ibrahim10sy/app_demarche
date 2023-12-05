@@ -123,11 +123,11 @@ class _ProfilState extends State<Profil> {
               return user?.image == null || user?.image?.isEmpty == true
                   ? CircleAvatar(
                       backgroundColor: d_red,
-                      radius: 28,
+                      radius: 100,
                       child: Text(
                         "${user!.prenom.substring(0, 1).toUpperCase()}${user.nom.substring(0, 1).toUpperCase()}",
                         style: const TextStyle(
-                            fontSize: 25,
+                            fontSize: 30,
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
                             letterSpacing: 2),

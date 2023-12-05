@@ -49,7 +49,7 @@ class Home_splash extends StatelessWidget {
                   bottom: 80,
                 ),
                 child: Text(
-                  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do",
+                  'Démarche Facile est une application conçue pour vous facile vos démarche administratives ',
                   textAlign: TextAlign.center,
                   style: GoogleFonts.poppins(color: Colors.black, fontSize: 16),
                 ),

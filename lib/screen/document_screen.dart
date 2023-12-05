@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:demarche_app/model/Document.dart';
 import 'package:dio/dio.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 //import 'package:open_file/open_file.dart';
@@ -63,9 +62,9 @@ class _DocumentScreenState extends State<DocumentScreen> {
                           style: const TextStyle(
                               fontSize: 22, fontWeight: FontWeight.bold),
                         ),
-                        IconButton(
-                            onPressed: () {},
-                            icon: const Icon(Icons.volume_up_outlined))
+                        // IconButton(
+                        //     onPressed: () {},
+                        //     icon: const Icon(Icons.volume_up_outlined))
                       ],
                     ),
                   ),
@@ -75,7 +74,7 @@ class _DocumentScreenState extends State<DocumentScreen> {
                 child: Padding(
                   padding: const EdgeInsets.all(15.0),
                   child: Container(
-                    height: 450,
+                    height: 480,
                     width: 300,
                     decoration: BoxDecoration(
                         color: Colors.white,
@@ -118,10 +117,9 @@ class _DocumentScreenState extends State<DocumentScreen> {
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 40, vertical: 15),
                             child: ElevatedButton(
-                              onPressed: () {},
-                              // onPressed: () {
-                              //   _downloadPDF(documents);
-                              // },
+                              onPressed: () {
+                                _downloadPDF(documents);
+                              },
                               style: ElevatedButton.styleFrom(
                                 shape: const StadiumBorder(),
                                 backgroundColor:
@@ -131,9 +129,9 @@ class _DocumentScreenState extends State<DocumentScreen> {
                               child: const Text(
                                 'Télécharger PDF',
                                 style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white),
                               ),
                             )),
                       ],
@@ -149,16 +147,16 @@ class _DocumentScreenState extends State<DocumentScreen> {
 
 Future<void> _downloadPDF(Document document) async {
   try {
-    // Vérifier si l'attribut fichier est présent
+    // Vérifier si l'attribut fichier est présent et non nul
     if (document.fichier != null && document.fichier!.isNotEmpty) {
-      // Extraire le nom du fichier à partir de l'URL
-      Uri uri = Uri.parse(document.fichier!);
+      // Ajouter l'hôte manuellement si absent
+      Uri uri = Uri.parse("http://10.0.2.2/${document.fichier}");
+
       String fileName = uri.pathSegments.last;
 
       // Effectuer une requête HTTP pour obtenir le fichier PDF depuis l'API
       final response = await http.get(uri);
 
-      //
       if (response.statusCode == 200) {
         // Obtenir le chemin l'application
         final documentDirectory = await getApplicationDocumentsDirectory();

@@ -35,8 +35,6 @@ class _InscriptionState extends State<Inscription> {
   File? photo;
   String _errorMessage = '';
 
- 
-
   Future<void> _pickImage() async {
     try {
       final image = await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -64,7 +62,6 @@ class _InscriptionState extends State<Inscription> {
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
         backgroundColor: const Color.fromARGB(255, 245, 242, 242),
         appBar: AppBar(
@@ -357,7 +354,7 @@ class _InscriptionState extends State<Inscription> {
                             String Confirmer =
                                 ConfirmerMotDePasse_controller.text;
 
-                               UtilisateurProvider utilisateurprovider =
+                            UtilisateurProvider utilisateurprovider =
                                 Provider.of<UtilisateurProvider>(context,
                                     listen: false);
 
@@ -424,7 +421,8 @@ class _InscriptionState extends State<Inscription> {
                                   print(nouveauUtilisateur.toString());
                                 }
 
-                               utilisateurprovider.setUtilisateur(nouveauUtilisateur);
+                                utilisateurprovider
+                                    .setUtilisateur(nouveauUtilisateur);
                                 showDialog(
                                     context: context,
                                     builder: (BuildContext context) {
@@ -461,9 +459,9 @@ class _InscriptionState extends State<Inscription> {
                           child: const Text(
                             'Inscription',
                             style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
                           ),
                         ),
                       ),
