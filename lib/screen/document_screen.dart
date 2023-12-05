@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:demarche_app/model/Document.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:http/http.dart' as http;
 //import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
@@ -117,35 +118,21 @@ class _DocumentScreenState extends State<DocumentScreen> {
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 40, vertical: 15),
                             child: ElevatedButton(
-                              onPressed: () {
-                                _downloadPDF(documents)
-                                    .then((value) => {
-                                          showDialog(
-                                              context: context,
-                                              builder: (BuildContext context) {
-                                                return AlertDialog(
-                                                  title: const Text(
-                                                      "Téléchargement du fichier"),
-                                                  content:
-                                                      const CircularProgressIndicator(
-                                                          color: d_red),
-                                                  actions: [
-                                                    TextButton(
-                                                        onPressed: () {
-                                                          Navigator.of(context)
-                                                              .pop();
-                                                        },
-                                                        child: const Text('OK'))
-                                                  ],
-                                                );
-                                              })
-                                        })
-                                    .catchError((onError) {
-                                  const Center(
-                                    child:
-                                        CircularProgressIndicator(color: d_red),
+                              onPressed: () async {
+                                String? filePath =
+                                    await _downloadPDF(documents);
+                                if (filePath != null && filePath.isNotEmpty) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => PDFView(
+                                        filePath: filePath,
+                                      ),
+                                    ),
                                   );
-                                });
+                                } else {
+                                  // Gérer le cas d'échec du téléchargement
+                                }
                               },
                               style: ElevatedButton.styleFrom(
                                 shape: const StadiumBorder(),
@@ -172,7 +159,7 @@ class _DocumentScreenState extends State<DocumentScreen> {
   }
 }
 
-Future<void> _downloadPDF(Document document) async {
+Future<String?> _downloadPDF(Document document) async {
   try {
     // Vérifier si l'attribut fichier est présent et non nul
     if (document.fichier != null && document.fichier!.isNotEmpty) {
@@ -196,39 +183,25 @@ Future<void> _downloadPDF(Document document) async {
 
         // Le fichier est maintenant accessible localement
         print('Fichier PDF téléchargé à ${file.path}');
+        return file.path; // Renvoyer le chemin du fichier
       } else {
         // Gérer l'erreur si la réponse n'est pas réussie
         print('Erreur lors du téléchargement du PDF: ${response.statusCode}');
+        return null; // Renvoyer null ou une autre valeur pour indiquer un échec
       }
     } else {
       // Gérer le cas où l'attribut fichier est manquant ou vide
       print(
           'L\'attribut "fichier" est manquant ou vide dans l\'objet Document');
+      return null; // Renvoyer null ou une autre valeur pour indiquer un échec
     }
   } catch (e) {
     // Gérer les exceptions lors du téléchargement
     print('Erreur lors du téléchargement du PDF: $e');
+    return null; // Renvoyer null ou une autre valeur pour indiquer un échec
   }
 }
 
-/*Future openFile({required String url, String? fileName}) async {
-  final name = fileName ?? url.split('/').last;
-  final file = await pickFile();
-  // final file = await donwloadFile(url, name);
-  if (file == null) return null;
-
-  print('Path : ${file.path}');
-  OpenFile.open(file.path);
-}
-
-Future<File?> pickFile() async {
-  final result = await FilePicker.platform.pickFiles();
-  if (result == null) {
-    return File(result!.files.first.path!);
-  }
-  return null;
-}
-*/
 Future<File?> donwloadFile(String url, String name) async {
   final appStorage = await getApplicationDocumentsDirectory();
   final file = File('${appStorage.path}/$name');
